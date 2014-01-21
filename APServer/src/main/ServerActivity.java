@@ -44,7 +44,7 @@ public class ServerActivity implements Runnable {
         while(true){
             ServerSocket server = new ServerSocket(1226);
             while(running) {
-                String[] datas = {null, null, null};
+                ArrayList<String> datas = new ArrayList<>();
                 String username = null, password = null, command = null;
                 String line = null;
 
@@ -57,9 +57,10 @@ public class ServerActivity implements Runnable {
                 if(line.length() < 100){
 
                     datas = globFunc.seperator(line, ":");
-                    username = datas[0];
-                    password = datas[1];
-                    command = datas[2];
+                    System.out.println(line);
+                    username = datas.get(0);
+                    password = datas.get(1);
+                    command = datas.get(2);
                     if(!connection.getInetAddress().toString().equals(lastConnection)){
                         sm.writeToOutput("\n[IP]\tincomming request from: "
                                 + connection.getInetAddress().toString().substring(
@@ -102,20 +103,14 @@ public class ServerActivity implements Runnable {
                                     System.out.println("not yet implemented");
                                     break;
                                 }
-                            case "getAllCampaigns":
+                            case "getCampaigns":
                                 {
-                                    ArrayList<Campaign> campaigns = query.getCampaigns(0);
-                                    
-//                                    ObjectOutputStream oos = new ObjectOutputStream(
-//                                            connection.getOutputStream());
-                                    ObjectOutputStream objectOut = new ObjectOutputStream(
-                                        new BufferedOutputStream(
-                                        new FileOutputStream(
-                                        "C:/Users/Flo/Documents/Adventure Planner/Campaign.bin")));
-                                    
-                                    objectOut.writeObject(campaigns);
-                                    objectOut.flush();
-                                    objectOut.close();
+                                    String param1 = datas.get(3);
+                                    if(param1.equals("ALL"))
+                                        param1 = "";
+                                    ArrayList<Campaign> campaigns = query.searchCampaigns(param1);
+                                    ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
+                                    toClient.writeObject(campaigns);
                                     
                                     break;
                                 }

@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -56,14 +55,15 @@ public class QueryManager {
         return user;
     }
     
-    public ArrayList<Campaign> getCampaigns(int userId) {
+    public ArrayList<Campaign> searchCampaigns(String searchArg) {
+//        if (!searchArg.equals(""))
+//            searchArg = "WHERE `camp_name` LIKE '%" + searchArg + "%'";
         ArrayList<Campaign> campaigns = new ArrayList<>();
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`campaign`");
-//            System.out.println(username);
-//            preparedStatement.setString(1, username);
+                    + "`campaign` WHERE `camp_name` LIKE ?");
+            preparedStatement.setString(1, '%' + searchArg + '%');
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 campaigns.add(new Campaign(result.getInt("camp_id"),

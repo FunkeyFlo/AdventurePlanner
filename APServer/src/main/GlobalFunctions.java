@@ -7,6 +7,7 @@
 package main;
 
 import connectivity.QueryManager;
+import java.util.ArrayList;
 import model.User;
 
 /**
@@ -17,19 +18,16 @@ public class GlobalFunctions {
     
     private QueryManager query = new QueryManager();
     
-    public String[] seperator(String sepItem, String sepChar){
-        String[] seperatedItems = {"", "", ""};
+    public ArrayList<String> seperator(String sepItem, String sepChar){
+        ArrayList<String> seperatedItems = new ArrayList<>();
         if (sepItem == null) {
             return seperatedItems;
         } else {
+
             String[] temp = sepItem.split(sepChar);
 
-            try{
-                for (int i = 0; i < temp.length; i++) {
-                    seperatedItems[i] += (temp[i]);
-                }
-            } catch(IndexOutOfBoundsException e) {
-                System.out.println(e.toString());
+            for (int i = 0; i < temp.length; i++) {
+                seperatedItems.add(temp[i]);
             }
 
             return seperatedItems;
