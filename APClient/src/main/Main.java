@@ -52,11 +52,12 @@ public class Main {
         UIManager.put("MenuItem.selectionForeground", Color.WHITE);
         UIManager.put("MenuItem.background", Color.DARK_GRAY);
         UIManager.put("MenuItem.foreground", Color.WHITE);
-        UIManager.put("Button.select", Color.DARK_GRAY);
+        UIManager.put("Button.select", new java.awt.Color(255,127,0));
         UIManager.put("ComboBox.background", Color.GRAY);
         UIManager.put("ComboBox.buttonBackground", Color.GRAY);
         UIManager.put("TextField.background", new java.awt.Color(102, 102, 102));
         UIManager.put("TextField.foreground", Color.WHITE);
+        UIManager.put("List.focusCellHighlightBorder", new java.awt.Color(255,127,0));
 //        UIManager.put();
 
         SwingUtilities.invokeLater(new Runnable() {

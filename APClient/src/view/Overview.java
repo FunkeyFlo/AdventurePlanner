@@ -24,6 +24,8 @@ public class Overview extends javax.swing.JFrame {
     private final String NOTHING = "null";
     private ArrayList<Campaign> campaigns;
     private DefaultListModel myCampaigns = new DefaultListModel();
+    private final String GET_ALL = "ALL";
+    private final String NO_MATCHES = "no matches were found";
     
     /**
      * Creates new form Overview
@@ -32,13 +34,9 @@ public class Overview extends javax.swing.JFrame {
         initComponents();
         
         liMyCampaigns.setModel(myCampaigns);
-        
         try {
             getMyInfo();
-            getCampaigns();
-            for (Campaign campaign : campaigns) {
-                myCampaigns.addElement(campaign);
-            }
+            getCampaigns(GET_ALL);
         } catch(IOException e) {
             System.out.println(e.toString());
         }
@@ -57,38 +55,39 @@ public class Overview extends javax.swing.JFrame {
         BufferedReader fromServer = new BufferedReader(new InputStreamReader(in));
         String line = fromServer.readLine();
         
-        if (line.equals(FAILED_AUTHENTICATION_MESSAGE)){
-            System.out.println(FAILED_AUTHENTICATION_MESSAGE);
-        } else {
-            ArrayList<String> returnedItems = Main.seperator(line, ":");
-            lblUsername.setText(returnedItems.get(0));
-            lblFirstName.setText(returnedItems.get(1));
-            lblLastName.setText(returnedItems.get(2));
-            if(returnedItems.get(3).equals(NOTHING)){
-                lblEmail.setText("Unknown");
-            } else {
-                lblEmail.setText(returnedItems.get(3));
-                System.out.println(returnedItems.get(3));
-            }
-        }
         connection.close();
     }
     
-    public void getCampaigns() throws IOException {
+    public void getCampaigns(String searchArg) throws IOException {
         Socket connection = new Socket(Session.getCurrentServerIp(),
                 Session.getCurrentServerPort());
         OutputStream toServer = connection.getOutputStream();
         PrintStream ps = new PrintStream(toServer, true);
         
         ps.println((Session.getCurrentUsername() + ":"
-                + Session.getCurrentPassword() + ":getAllCampaigns"));
+                + Session.getCurrentPassword() + ":getCampaigns:" + searchArg));
         
         try {
-            ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(
-            new FileInputStream("C:/Users/Flo/Documents/Adventure Planner/Campaign.bin")));
-            campaigns = (ArrayList) objectIn.readObject();
-            objectIn.close();
-//            System.out.println(campaigns.get(0).getCampaignName());
+            ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
+            campaigns = (ArrayList) inStream.readObject();
+            if(campaigns.isEmpty()){
+                myCampaigns.removeAllElements();
+                myCampaigns.addElement(NO_MATCHES);
+            } else {
+                myCampaigns.removeAllElements();
+            
+                for (Campaign campaign : campaigns) {
+                    myCampaigns.addElement(campaign);
+                }
+                lblCampName.setText(campaigns.get(0).getCampaignName());
+                lblDescription.setText("<html>" + campaigns.get(0).getDescription()+ "</html>");
+                lblRPGType.setText(campaigns.get(0).getRpgName());
+                if(campaigns.get(0).getAccess() == 2){
+                    lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Private 1.fw.png")));
+                } else {
+                    lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 1.fw.png")));
+                }
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -106,22 +105,25 @@ public class Overview extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        lblUsername = new javax.swing.JLabel();
-        lblFirstName = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        lblMyAccount = new javax.swing.JLabel();
-        lblLastName = new javax.swing.JLabel();
-        lblEmail = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         liMyCampaigns = new javax.swing.JList();
         jPanel4 = new javax.swing.JPanel();
         tfSearchCampaigns = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        imgCampaign = new javax.swing.JLabel();
+        lblCampName = new javax.swing.JLabel();
+        lblDescription = new javax.swing.JLabel();
+        lblRPGType = new javax.swing.JLabel();
+        lblAccess = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        liMyCampaigns1 = new javax.swing.JList();
+        jPanel5 = new javax.swing.JPanel();
+        tfSearchCampaigns1 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
         overviewMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miLogout = new javax.swing.JMenuItem();
@@ -133,84 +135,6 @@ public class Overview extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
-        jPanel2.setBackground(new java.awt.Color(40, 40, 40));
-
-        lblUsername.setBackground(new java.awt.Color(66, 66, 66));
-        lblUsername.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblUsername.setForeground(new java.awt.Color(130, 130, 130));
-        lblUsername.setText("Username");
-
-        lblFirstName.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblFirstName.setForeground(new java.awt.Color(130, 130, 130));
-        lblFirstName.setText("First name");
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/knight.png"))); // NOI18N
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 66, 66), 4));
-
-        lblMyAccount.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        lblMyAccount.setForeground(new java.awt.Color(255, 255, 255));
-        lblMyAccount.setText("My Account");
-
-        lblLastName.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblLastName.setForeground(new java.awt.Color(130, 130, 130));
-        lblLastName.setText("Last name");
-
-        lblEmail.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblEmail.setForeground(new java.awt.Color(130, 130, 130));
-        lblEmail.setText("Email address");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMyAccount)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUsername)
-                            .addComponent(lblFirstName)
-                            .addComponent(lblLastName)
-                            .addComponent(lblEmail))))
-                .addContainerGap(129, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblMyAccount)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblUsername)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblFirstName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblLastName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblEmail)
-                        .addGap(8, 8, 8)))
-                .addContainerGap())
-        );
-
-        jPanel5.setBackground(new java.awt.Color(40, 40, 40));
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 209, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 142, Short.MAX_VALUE)
-        );
-
         jPanel7.setBackground(new java.awt.Color(66, 66, 66));
 
         jScrollPane2.setBackground(new java.awt.Color(66, 66, 66));
@@ -219,8 +143,8 @@ public class Overview extends javax.swing.JFrame {
 
         liMyCampaigns.setBackground(new java.awt.Color(66, 66, 66));
         liMyCampaigns.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        liMyCampaigns.setForeground(new java.awt.Color(255, 255, 255));
-        liMyCampaigns.setSelectionBackground(new java.awt.Color(213, 85, 0));
+        liMyCampaigns.setForeground(new java.awt.Color(204, 204, 204));
+        liMyCampaigns.setSelectionBackground(new java.awt.Color(255, 127, 0));
         liMyCampaigns.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setViewportView(liMyCampaigns);
 
@@ -231,68 +155,183 @@ public class Overview extends javax.swing.JFrame {
         tfSearchCampaigns.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         tfSearchCampaigns.setBorder(null);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search_icon.png"))); // NOI18N
+        jButton2.setBackground(new java.awt.Color(102, 102, 102));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search_icon.png"))); // NOI18N
+        jButton2.setBorder(null);
+        jButton2.setBorderPainted(false);
+        jButton2.setFocusPainted(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tfSearchCampaigns, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addComponent(tfSearchCampaigns, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(0, 1, Short.MAX_VALUE)
                 .addComponent(tfSearchCampaigns, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2))
         );
 
         jPanel3.setBackground(new java.awt.Color(40, 40, 40));
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        imgCampaign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/knight.png"))); // NOI18N
+        imgCampaign.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 66, 66), 4));
+
+        lblCampName.setBackground(new java.awt.Color(66, 66, 66));
+        lblCampName.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
+        lblCampName.setForeground(new java.awt.Color(255, 255, 255));
+        lblCampName.setText("Campaign Name");
+
+        lblDescription.setForeground(new java.awt.Color(190, 190, 190));
+        lblDescription.setText("Description");
+
+        lblRPGType.setForeground(new java.awt.Color(255, 127, 0));
+        lblRPGType.setText("RPG Type");
+
+        lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 2.fw.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(106, 106, 106))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imgCampaign, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblRPGType)
+                            .addComponent(lblCampName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                        .addComponent(lblAccess)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jButton1)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(imgCampaign, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCampName)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(lblRPGType))
+                            .addComponent(lblAccess))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        jPanel2.setBackground(new java.awt.Color(40, 40, 40));
+
+        jPanel8.setBackground(new java.awt.Color(66, 66, 66));
+
+        jScrollPane3.setBackground(new java.awt.Color(66, 66, 66));
+        jScrollPane3.setBorder(null);
+        jScrollPane3.setForeground(new java.awt.Color(66, 66, 66));
+
+        liMyCampaigns1.setBackground(new java.awt.Color(66, 66, 66));
+        liMyCampaigns1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        liMyCampaigns1.setForeground(new java.awt.Color(204, 204, 204));
+        liMyCampaigns1.setSelectionBackground(new java.awt.Color(255, 127, 0));
+        liMyCampaigns1.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        jScrollPane3.setViewportView(liMyCampaigns1);
+
+        jPanel5.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel5.setForeground(new java.awt.Color(102, 102, 102));
+
+        tfSearchCampaigns1.setBackground(new java.awt.Color(102, 102, 102));
+        tfSearchCampaigns1.setForeground(new java.awt.Color(255, 255, 255));
+        tfSearchCampaigns1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tfSearchCampaigns1.setBorder(null);
+
+        jButton3.setBackground(new java.awt.Color(102, 102, 102));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search_icon.png"))); // NOI18N
+        jButton3.setToolTipText("Search through adventures from the selected campaign");
+        jButton3.setBorder(null);
+        jButton3.setBorderPainted(false);
+        jButton3.setFocusPainted(false);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tfSearchCampaigns1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(tfSearchCampaigns1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -303,24 +342,19 @@ public class Overview extends javax.swing.JFrame {
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         overviewMenu.setBackground(new java.awt.Color(40, 40, 40));
@@ -329,7 +363,7 @@ public class Overview extends javax.swing.JFrame {
         overviewMenu.setBorderPainted(false);
 
         jMenu1.setBorder(null);
-        jMenu1.setForeground(new java.awt.Color(213, 85, 0));
+        jMenu1.setForeground(new java.awt.Color(255, 127, 0));
         jMenu1.setText("Options");
         jMenu1.setBorderPainted(false);
         jMenu1.setContentAreaFilled(false);
@@ -337,7 +371,7 @@ public class Overview extends javax.swing.JFrame {
 
         miLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
         miLogout.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
-        miLogout.setForeground(new java.awt.Color(213, 85, 0));
+        miLogout.setForeground(new java.awt.Color(255, 127, 0));
         miLogout.setText("Logout");
         miLogout.setBorder(null);
         miLogout.setBorderPainted(false);
@@ -352,7 +386,7 @@ public class Overview extends javax.swing.JFrame {
         overviewMenu.add(jMenu1);
 
         jMenu2.setBorder(null);
-        jMenu2.setForeground(new java.awt.Color(213, 85, 0));
+        jMenu2.setForeground(new java.awt.Color(255, 127, 0));
         jMenu2.setText("Edit");
         jMenu2.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
         overviewMenu.add(jMenu2);
@@ -383,55 +417,22 @@ public class Overview extends javax.swing.JFrame {
         Main.displayLogin();
     }//GEN-LAST:event_miLogoutActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            myCampaigns.removeAllElements();
-            getCampaigns();
-            myCampaigns.addElement(campaigns.get(0));
+            if(tfSearchCampaigns.getText().trim().equals("")){
+                getCampaigns(GET_ALL);
+            } else {
+                getCampaigns(tfSearchCampaigns.getText().trim());
+            }
         } catch (IOException ex) {
             Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Overview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Overview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Overview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Overview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Overview().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel imgCampaign;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
@@ -440,15 +441,18 @@ public class Overview extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblEmail;
-    private javax.swing.JLabel lblFirstName;
-    private javax.swing.JLabel lblLastName;
-    private javax.swing.JLabel lblMyAccount;
-    private javax.swing.JLabel lblUsername;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblAccess;
+    private javax.swing.JLabel lblCampName;
+    private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblRPGType;
     private javax.swing.JList liMyCampaigns;
+    private javax.swing.JList liMyCampaigns1;
     private javax.swing.JMenuItem miLogout;
     private javax.swing.JMenuBar overviewMenu;
     private javax.swing.JTextField tfSearchCampaigns;
+    private javax.swing.JTextField tfSearchCampaigns1;
     // End of variables declaration//GEN-END:variables
 }
