@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import main.*;
 import model.Campaign;
@@ -126,8 +127,8 @@ public class Overview extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         overviewMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        menuAccount = new javax.swing.JMenu();
         miLogout = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getToolkit().getImage(getClass().getResource("/img/dock_icon.png")));
@@ -145,7 +146,6 @@ public class Overview extends javax.swing.JFrame {
         liMyCampaigns.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         liMyCampaigns.setForeground(new java.awt.Color(204, 204, 204));
         liMyCampaigns.setSelectionBackground(new java.awt.Color(255, 127, 0));
-        liMyCampaigns.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setViewportView(liMyCampaigns);
 
         jPanel4.setBackground(new java.awt.Color(102, 102, 102));
@@ -154,6 +154,11 @@ public class Overview extends javax.swing.JFrame {
         tfSearchCampaigns.setForeground(new java.awt.Color(255, 255, 255));
         tfSearchCampaigns.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         tfSearchCampaigns.setBorder(null);
+        tfSearchCampaigns.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfSearchCampaignsKeyPressed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(102, 102, 102));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search_icon.png"))); // NOI18N
@@ -267,7 +272,6 @@ public class Overview extends javax.swing.JFrame {
         liMyCampaigns1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         liMyCampaigns1.setForeground(new java.awt.Color(204, 204, 204));
         liMyCampaigns1.setSelectionBackground(new java.awt.Color(255, 127, 0));
-        liMyCampaigns1.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jScrollPane3.setViewportView(liMyCampaigns1);
 
         jPanel5.setBackground(new java.awt.Color(102, 102, 102));
@@ -361,35 +365,37 @@ public class Overview extends javax.swing.JFrame {
         overviewMenu.setBorder(null);
         overviewMenu.setForeground(new java.awt.Color(51, 51, 51));
         overviewMenu.setBorderPainted(false);
+        overviewMenu.setMargin(new java.awt.Insets(20, 20, 20, 20));
+        overviewMenu.setMinimumSize(new java.awt.Dimension(0, 50));
+        overviewMenu.setName(""); // NOI18N
 
         jMenu1.setBorder(null);
         jMenu1.setForeground(new java.awt.Color(255, 127, 0));
         jMenu1.setText("Options");
-        jMenu1.setBorderPainted(false);
         jMenu1.setContentAreaFilled(false);
         jMenu1.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        overviewMenu.add(jMenu1);
+
+        menuAccount.setBorder(null);
+        menuAccount.setForeground(new java.awt.Color(255, 127, 0));
+        menuAccount.setText("Account");
+        menuAccount.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         miLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
         miLogout.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
         miLogout.setForeground(new java.awt.Color(255, 127, 0));
         miLogout.setText("Logout");
         miLogout.setBorder(null);
-        miLogout.setBorderPainted(false);
-        miLogout.setOpaque(false);
         miLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miLogoutActionPerformed(evt);
             }
         });
-        jMenu1.add(miLogout);
+        menuAccount.add(miLogout);
 
-        overviewMenu.add(jMenu1);
-
-        jMenu2.setBorder(null);
-        jMenu2.setForeground(new java.awt.Color(255, 127, 0));
-        jMenu2.setText("Edit");
-        jMenu2.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
-        overviewMenu.add(jMenu2);
+		overviewMenu.add(Box.createHorizontalGlue());
+		
+        overviewMenu.add(menuAccount);
 
         setJMenuBar(overviewMenu);
 
@@ -429,12 +435,25 @@ public class Overview extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void tfSearchCampaignsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchCampaignsKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            try {
+                if(tfSearchCampaigns.getText().trim().equals("")){
+                    getCampaigns(GET_ALL);
+                } else {
+                    getCampaigns(tfSearchCampaigns.getText().trim());
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tfSearchCampaignsKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel imgCampaign;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -450,6 +469,7 @@ public class Overview extends javax.swing.JFrame {
     private javax.swing.JLabel lblRPGType;
     private javax.swing.JList liMyCampaigns;
     private javax.swing.JList liMyCampaigns1;
+    private javax.swing.JMenu menuAccount;
     private javax.swing.JMenuItem miLogout;
     private javax.swing.JMenuBar overviewMenu;
     private javax.swing.JTextField tfSearchCampaigns;

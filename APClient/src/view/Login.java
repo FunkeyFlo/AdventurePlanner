@@ -8,6 +8,8 @@ package view;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -119,10 +121,20 @@ public class Login extends javax.swing.JFrame {
         tfUsername.setBackground(new java.awt.Color(102, 102, 102));
         tfUsername.setForeground(new java.awt.Color(204, 204, 204));
         tfUsername.setBorder(null);
+        tfUsername.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfUsernameKeyPressed(evt);
+            }
+        });
 
         tfPassword.setBackground(new java.awt.Color(102, 102, 102));
         tfPassword.setForeground(new java.awt.Color(204, 204, 204));
         tfPassword.setBorder(null);
+        tfPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfPasswordKeyPressed(evt);
+            }
+        });
 
         btLogin.setBackground(new java.awt.Color(102, 102, 102));
         btLogin.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -160,6 +172,11 @@ public class Login extends javax.swing.JFrame {
         cbServers.setForeground(new java.awt.Color(204, 204, 204));
         cbServers.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "localhost", "83.160.96.155" }));
         cbServers.setOpaque(false);
+        cbServers.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cbServersKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -247,6 +264,36 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btLoginActionPerformed
+
+    private void tfUsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfUsernameKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            try {
+                doLogin();
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tfUsernameKeyPressed
+
+    private void tfPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPasswordKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            try {
+                doLogin();
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tfPasswordKeyPressed
+
+    private void cbServersKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbServersKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            try {
+                doLogin();
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_cbServersKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClose;
