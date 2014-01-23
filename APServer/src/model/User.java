@@ -2,7 +2,7 @@ package model;
 
 /**
  *
- * @author Niels Reijn
+ * @author Florentijn Cornet
  */
 public class User {
 
