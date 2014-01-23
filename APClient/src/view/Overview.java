@@ -79,11 +79,15 @@ public class Overview extends javax.swing.JFrame {
     public void getCampaigns(String searchArg) throws IOException {
         Socket connection = new Socket(Session.getCurrentServerIp(),
                 Session.getCurrentServerPort());
-        OutputStream toServer = connection.getOutputStream();
-        PrintStream ps = new PrintStream(toServer, true);
+        ArrayList<String> stream = new ArrayList<>();
         
-        ps.println((Session.getCurrentUsername() + ":"
-                + Session.getCurrentPassword() + ":getCampaigns:" + searchArg));
+        stream.add(Session.getCurrentUsername());
+        stream.add(Session.getCurrentPassword());
+        stream.add("getCampaigns");
+        stream.add(searchArg);
+        
+        ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
+        toServer.writeObject(stream);
         
         try {
             ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());

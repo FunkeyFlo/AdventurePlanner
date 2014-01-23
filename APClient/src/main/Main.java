@@ -71,6 +71,9 @@ public class Main {
         UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("List.focusCellHighlightBorder", new java.awt.Color(255,127,0));
+        UIManager.put("OptionPane.background",  new java.awt.Color(51, 51, 51));
+        UIManager.put("Panel.background", new java.awt.Color(51, 51, 51));
+        UIManager.put("OptionPane.messageForeground",  new java.awt.Color(255, 127, 0));
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

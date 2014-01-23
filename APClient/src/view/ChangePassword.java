@@ -6,15 +6,10 @@
 
 package view;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.logging.*;
 import javax.swing.JOptionPane;
 import main.Session;
 
@@ -39,13 +34,17 @@ public class ChangePassword extends javax.swing.JFrame {
         Socket connection = new Socket(Session.getCurrentServerIp(), Session.getCurrentServerPort());
         
         if(newPassword1.equals(newPassword2)){
-            
-            OutputStream toServer = connection.getOutputStream();
-            PrintStream ps = new PrintStream(toServer, true);
-            
-            ps.println((Session.getCurrentUsername() + ":"
-                    + Session.getCurrentPassword() + ":changePassword:"
-                    + oldPassword + ":" + newPassword1));
+            ArrayList<String> stream = new ArrayList<>();
+        
+            stream.add(Session.getCurrentUsername());
+            stream.add(Session.getCurrentPassword());
+            stream.add("changePassword");
+            stream.add(oldPassword);
+            stream.add(newPassword1);
+
+            ObjectOutputStream toServer = new ObjectOutputStream(
+                    connection.getOutputStream());
+            toServer.writeObject(stream);
             
             InputStream in = connection.getInputStream();
             BufferedReader fromServer = new BufferedReader(new InputStreamReader(in));
@@ -86,8 +85,9 @@ public class ChangePassword extends javax.swing.JFrame {
         btCommit = new javax.swing.JButton();
         btCancel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Adventure Planner - Change Password");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
@@ -165,7 +165,7 @@ public class ChangePassword extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 184, Short.MAX_VALUE)
+                        .addGap(0, 192, Short.MAX_VALUE)
                         .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btCommit, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))

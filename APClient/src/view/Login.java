@@ -8,6 +8,7 @@ package view;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
@@ -40,15 +41,16 @@ public class Login extends javax.swing.JFrame {
     public void doLogin() throws IOException {
         String username = tfUsername.getText();
         String password = tfPassword.getText();
+        ArrayList<String> stream = new ArrayList<>();
         
         Socket connection = new Socket(cbServers.getSelectedItem().toString().trim(), 1226);
         
-        // Creates output to send to server
-        OutputStream toServer = connection.getOutputStream();
-        PrintStream ps = new PrintStream(toServer, true); // Second param: auto-flush on write = true
+        stream.add(username);
+        stream.add(password);
+        stream.add("login");
         
-        // Item to send
-        ps.println((username + ":" + password + ":login"));
+        ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
+        toServer.writeObject(stream);
         
         InputStream in = connection.getInputStream();
         BufferedReader fromServer = new BufferedReader(new InputStreamReader(in));
