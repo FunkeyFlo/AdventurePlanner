@@ -113,6 +113,25 @@ public class ServerActivity implements Runnable {
                                     toClient.writeObject(campaigns);
                                     break;
                                 }
+                            case "changePassword":
+                                {
+                                    OutputStream toClient = connection.getOutputStream();
+                                    PrintStream ps = new PrintStream(toClient, true); // Second param: auto-flush on write = true
+                                    
+                                    String oldPassword = datas.get(3);
+                                    String newPassword = datas.get(4);
+                                    
+                                    // check if old password matches
+                                    if(globFunc.authenticate(username, oldPassword)){
+                                        query.changePassword(newPassword, username);
+                                        ps.println("Password has successfully been changed");
+                                        break;
+                                    } else {
+                                        ps.println("Old password was incorrect");
+                                        break;
+                                    }
+                                            
+                                }
                             default:
                                 {
                                     OutputStream toClient = connection.getOutputStream();

@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,20 +22,16 @@ import java.util.ArrayList;
 public class QueryManager {
     
     private final DatabaseManager db = new DatabaseManager();
-
-//    private int permissionId, incorrectLogin, userId;
-//    private String username, firstName, lastName, password;
-//    private boolean isLoggedIn = false;
     public final int MAX_INCORRECT_LOGINS = 3;
     public PreparedStatement preparedStatement = null;
     
+    // USER QUERIES ------------------------------------------------------------
     public User getUserData(String username) {
         User user = new User();
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
                     + "`user` WHERE `username`= ?");
-//            System.out.println(username);
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
@@ -55,9 +53,23 @@ public class QueryManager {
         return user;
     }
     
+    public void changePassword(String password, String username) {
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("UPDATE `user`"
+                    + "SET `password` = ? WHERE `username` = ?");
+            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.closeConnection();
+        }
+    }
+    
+    // CAMPAIGN QUERIES --------------------------------------------------------
     public ArrayList<Campaign> searchCampaigns(String searchArg) {
-//        if (!searchArg.equals(""))
-//            searchArg = "WHERE `camp_name` LIKE '%" + searchArg + "%'";
         ArrayList<Campaign> campaigns = new ArrayList<>();
         try {
             db.openConnection();
