@@ -37,7 +37,7 @@ public class QueryManager {
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
-                user.setUserId(result.getInt("user_id"));
+                user.setUserId(result.getInt("id"));
                 user.setUsername(result.getString("username"));
                 user.setFirstName(result.getString("first_name"));
                 user.setLastName(result.getString("last_name"));
@@ -62,13 +62,13 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`campaign` WHERE `camp_name` LIKE ?");
+                    + "`campaign` WHERE `name` LIKE ? ORDER BY `name`");
             preparedStatement.setString(1, '%' + searchArg + '%');
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
-                campaigns.add(new Campaign(result.getInt("camp_id"),
+                campaigns.add(new Campaign(result.getInt("id"),
                     result.getInt("access"),
-                    result.getString("camp_name"),
+                    result.getString("name"),
                     result.getString("rpg_name"),
                     result.getString("description")));
             }

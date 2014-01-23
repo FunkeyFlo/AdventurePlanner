@@ -12,7 +12,6 @@ import connectivity.QueryManager;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import main.*;
 import views.ServerMonitor;
 
 /**
@@ -77,7 +76,6 @@ public class ServerActivity implements Runnable {
                                     PrintStream ps = new PrintStream(toClient, true); // Second param: auto-flush on write = true
 
                                     ps.println("Login succesful!");
-
                                     break;
                                 }
                             case "getMyInfo":
@@ -95,7 +93,6 @@ public class ServerActivity implements Runnable {
                                             + ":" + clientsFirstName
                                             + ":" + clientsLastName
                                             + ":" + clientsEmail);
-
                                     break;
                                 }
                             case "getMyCampaigns":
@@ -106,12 +103,14 @@ public class ServerActivity implements Runnable {
                             case "getCampaigns":
                                 {
                                     String param1 = datas.get(3);
-                                    if(param1.equals("ALL"))
+                                    
+                                    if(param1.equals("ALL")){
                                         param1 = "";
+                                    }
+                                    
                                     ArrayList<Campaign> campaigns = query.searchCampaigns(param1);
                                     ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
                                     toClient.writeObject(campaigns);
-                                    
                                     break;
                                 }
                             default:
@@ -120,6 +119,7 @@ public class ServerActivity implements Runnable {
                                     PrintStream ps = new PrintStream(toClient, true);
                                     ps.println("You are using an old version..");
                                     sm.writeToOutput("[ERROR]\tNo command was provided by client");
+                                    break;
                                 }
                         }
                     } else {

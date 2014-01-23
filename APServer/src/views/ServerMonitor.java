@@ -122,6 +122,9 @@ public class ServerMonitor extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Monitor"));
 
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setAutoscrolls(true);
+
         taMonitor.setEditable(false);
         taMonitor.setColumns(20);
         taMonitor.setRows(5);
