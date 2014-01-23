@@ -32,20 +32,20 @@ public class ChangePassword extends javax.swing.JFrame {
     }
     
     public void doChangePassword() throws IOException {
-        String oldPassword1 = tfOldPassword1.getText().trim();
-        String oldPassword2 = tfOldPassword2.getText().trim();
-        String newPassword = tfNewPassword.getText().trim();
+        String oldPassword = tfOldPassword.getText().trim();
+        String newPassword1 = tfNewPassword1.getText().trim();
+        String newPassword2 = tfNewPassword2.getText().trim();
         
         Socket connection = new Socket(Session.getCurrentServerIp(), Session.getCurrentServerPort());
         
-        if(oldPassword1.equals(oldPassword2)){
+        if(newPassword1.equals(newPassword2)){
             
             OutputStream toServer = connection.getOutputStream();
             PrintStream ps = new PrintStream(toServer, true);
             
             ps.println((Session.getCurrentUsername() + ":"
                     + Session.getCurrentPassword() + ":changePassword:"
-                    + oldPassword1 + ":" + newPassword));
+                    + oldPassword + ":" + newPassword1));
             
             InputStream in = connection.getInputStream();
             BufferedReader fromServer = new BufferedReader(new InputStreamReader(in));
@@ -55,7 +55,7 @@ public class ChangePassword extends javax.swing.JFrame {
             if(line.equals("Password has successfully been changed")){
                 JOptionPane.showMessageDialog(null, line, "Success!",
                                 JOptionPane.NO_OPTION);
-                Session.setCurrentPassword(newPassword);
+                Session.setCurrentPassword(newPassword1);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(null, line, "Error",
@@ -77,12 +77,12 @@ public class ChangePassword extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        lblOldPassword1 = new javax.swing.JLabel();
-        tfOldPassword1 = new javax.swing.JPasswordField();
-        tfOldPassword2 = new javax.swing.JPasswordField();
-        lblOldPassword2 = new javax.swing.JLabel();
-        tfNewPassword = new javax.swing.JPasswordField();
-        lblNewPassword = new javax.swing.JLabel();
+        lblOldPassword = new javax.swing.JLabel();
+        tfOldPassword = new javax.swing.JPasswordField();
+        tfNewPassword1 = new javax.swing.JPasswordField();
+        lblNewPassword1 = new javax.swing.JLabel();
+        tfNewPassword2 = new javax.swing.JPasswordField();
+        lblNewPassword2 = new javax.swing.JLabel();
         btCommit = new javax.swing.JButton();
         btCancel = new javax.swing.JButton();
 
@@ -91,44 +91,44 @@ public class ChangePassword extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
-        lblOldPassword1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        lblOldPassword1.setForeground(new java.awt.Color(255, 127, 0));
-        lblOldPassword1.setText("Typ password");
+        lblOldPassword.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        lblOldPassword.setForeground(new java.awt.Color(255, 127, 0));
+        lblOldPassword.setText("Typ password");
 
-        tfOldPassword1.setBackground(new java.awt.Color(102, 102, 102));
-        tfOldPassword1.setForeground(new java.awt.Color(204, 204, 204));
-        tfOldPassword1.setBorder(null);
-        tfOldPassword1.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfOldPassword.setBackground(new java.awt.Color(102, 102, 102));
+        tfOldPassword.setForeground(new java.awt.Color(204, 204, 204));
+        tfOldPassword.setBorder(null);
+        tfOldPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfOldPassword1KeyPressed(evt);
+                tfOldPasswordKeyPressed(evt);
             }
         });
 
-        tfOldPassword2.setBackground(new java.awt.Color(102, 102, 102));
-        tfOldPassword2.setForeground(new java.awt.Color(204, 204, 204));
-        tfOldPassword2.setBorder(null);
-        tfOldPassword2.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfNewPassword1.setBackground(new java.awt.Color(102, 102, 102));
+        tfNewPassword1.setForeground(new java.awt.Color(204, 204, 204));
+        tfNewPassword1.setBorder(null);
+        tfNewPassword1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfOldPassword2KeyPressed(evt);
+                tfNewPassword1KeyPressed(evt);
             }
         });
 
-        lblOldPassword2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        lblOldPassword2.setForeground(new java.awt.Color(255, 127, 0));
-        lblOldPassword2.setText("Retyp old password");
+        lblNewPassword1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        lblNewPassword1.setForeground(new java.awt.Color(255, 127, 0));
+        lblNewPassword1.setText("Typ new password");
 
-        tfNewPassword.setBackground(new java.awt.Color(102, 102, 102));
-        tfNewPassword.setForeground(new java.awt.Color(204, 204, 204));
-        tfNewPassword.setBorder(null);
-        tfNewPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfNewPassword2.setBackground(new java.awt.Color(102, 102, 102));
+        tfNewPassword2.setForeground(new java.awt.Color(204, 204, 204));
+        tfNewPassword2.setBorder(null);
+        tfNewPassword2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfNewPasswordKeyPressed(evt);
+                tfNewPassword2KeyPressed(evt);
             }
         });
 
-        lblNewPassword.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        lblNewPassword.setForeground(new java.awt.Color(255, 127, 0));
-        lblNewPassword.setText("Typ new password");
+        lblNewPassword2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        lblNewPassword2.setForeground(new java.awt.Color(255, 127, 0));
+        lblNewPassword2.setText("Typ new password");
 
         btCommit.setBackground(new java.awt.Color(102, 102, 102));
         btCommit.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -171,14 +171,14 @@ public class ChangePassword extends javax.swing.JFrame {
                         .addComponent(btCommit, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblOldPassword2)
-                            .addComponent(lblOldPassword1)
-                            .addComponent(lblNewPassword))
+                            .addComponent(lblNewPassword1)
+                            .addComponent(lblOldPassword)
+                            .addComponent(lblNewPassword2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfNewPassword)
-                            .addComponent(tfOldPassword1)
-                            .addComponent(tfOldPassword2))))
+                            .addComponent(tfNewPassword2)
+                            .addComponent(tfOldPassword)
+                            .addComponent(tfNewPassword1))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -186,16 +186,16 @@ public class ChangePassword extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfOldPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblOldPassword1))
+                    .addComponent(tfOldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblOldPassword))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfOldPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblOldPassword2))
+                    .addComponent(tfNewPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNewPassword1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNewPassword))
+                    .addComponent(tfNewPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNewPassword2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btCommit, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -217,7 +217,7 @@ public class ChangePassword extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfOldPassword1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfOldPassword1KeyPressed
+    private void tfOldPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfOldPasswordKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             try {
                 doChangePassword();
@@ -225,9 +225,9 @@ public class ChangePassword extends javax.swing.JFrame {
                 Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_tfOldPassword1KeyPressed
+    }//GEN-LAST:event_tfOldPasswordKeyPressed
 
-    private void tfOldPassword2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfOldPassword2KeyPressed
+    private void tfNewPassword1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNewPassword1KeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             try {
                 doChangePassword();
@@ -235,9 +235,9 @@ public class ChangePassword extends javax.swing.JFrame {
                 Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_tfOldPassword2KeyPressed
+    }//GEN-LAST:event_tfNewPassword1KeyPressed
 
-    private void tfNewPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNewPasswordKeyPressed
+    private void tfNewPassword2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNewPassword2KeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             try {
                 doChangePassword();
@@ -245,7 +245,7 @@ public class ChangePassword extends javax.swing.JFrame {
                 Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_tfNewPasswordKeyPressed
+    }//GEN-LAST:event_tfNewPassword2KeyPressed
 
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
         dispose();
@@ -263,11 +263,11 @@ public class ChangePassword extends javax.swing.JFrame {
     private javax.swing.JButton btCancel;
     private javax.swing.JButton btCommit;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblNewPassword;
-    private javax.swing.JLabel lblOldPassword1;
-    private javax.swing.JLabel lblOldPassword2;
-    private javax.swing.JPasswordField tfNewPassword;
-    private javax.swing.JPasswordField tfOldPassword1;
-    private javax.swing.JPasswordField tfOldPassword2;
+    private javax.swing.JLabel lblNewPassword1;
+    private javax.swing.JLabel lblNewPassword2;
+    private javax.swing.JLabel lblOldPassword;
+    private javax.swing.JPasswordField tfNewPassword1;
+    private javax.swing.JPasswordField tfNewPassword2;
+    private javax.swing.JPasswordField tfOldPassword;
     // End of variables declaration//GEN-END:variables
 }
