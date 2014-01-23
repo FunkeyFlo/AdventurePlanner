@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Box;
+//import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import main.*;
 import model.Campaign;
@@ -33,11 +33,13 @@ public class Overview extends javax.swing.JFrame {
      */
     public Overview() {
         initComponents();
+//        overviewMenu.add(Box.createHorizontalGlue());
         
         liMyCampaigns.setModel(myCampaigns);
         try {
-            getMyInfo();
+//            getMyInfo();
             getCampaigns(GET_ALL);
+            setSelectedCampaign(0);
         } catch(IOException e) {
             System.out.println(e.toString());
         }
@@ -60,13 +62,17 @@ public class Overview extends javax.swing.JFrame {
     }
     
     public void setSelectedCampaign(int index){
-        lblCampName.setText(campaigns.get(index).getCampaignName());
-        lblDescription.setText("<html>" + campaigns.get(index).getDescription()+ "</html>");
-        lblRPGType.setText(campaigns.get(index).getRpgName());
-        if(campaigns.get(index).getAccess() == 2){
-            lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Private 1.fw.png")));
-        } else {
-            lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 1.fw.png")));
+        try {
+            lblCampName.setText(campaigns.get(index).getCampaignName());
+            lblDescription.setText("<html>" + campaigns.get(index).getDescription()+ "</html>");
+            lblRPGType.setText(campaigns.get(index).getRpgName());
+            if(campaigns.get(index).getAccess() == 2){
+                lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Private 1.fw.png")));
+            } else {
+                lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 1.fw.png")));
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.toString());
         }
     }
     
@@ -135,9 +141,10 @@ public class Overview extends javax.swing.JFrame {
         lblAdventures = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         overviewMenu = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuSettings = new javax.swing.JMenu();
         menuAccount = new javax.swing.JMenu();
         miLogout = new javax.swing.JMenuItem();
+        miChangePassword = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -157,6 +164,8 @@ public class Overview extends javax.swing.JFrame {
         jMenuBar2.add(jMenu4);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Adventure Planner");
+        setMinimumSize(new java.awt.Dimension(879, 499));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -337,7 +346,7 @@ public class Overview extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addComponent(lblAdventures, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel9.setBackground(new java.awt.Color(40, 40, 40));
@@ -374,9 +383,9 @@ public class Overview extends javax.swing.JFrame {
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(193, Short.MAX_VALUE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel6);
@@ -389,7 +398,7 @@ public class Overview extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -405,33 +414,64 @@ public class Overview extends javax.swing.JFrame {
         overviewMenu.setBorder(null);
         overviewMenu.setForeground(new java.awt.Color(51, 51, 51));
         overviewMenu.setBorderPainted(false);
-        overviewMenu.setMargin(new java.awt.Insets(20, 20, 20, 20));
+        overviewMenu.setMargin(new java.awt.Insets(40, 40, 40, 40));
         overviewMenu.setMinimumSize(new java.awt.Dimension(0, 50));
         overviewMenu.setName(""); // NOI18N
+        overviewMenu.setPreferredSize(new java.awt.Dimension(64, 30));
 
-        jMenu1.setBorder(null);
-        jMenu1.setForeground(new java.awt.Color(255, 127, 0));
-        jMenu1.setText("Options");
-        jMenu1.setContentAreaFilled(false);
-        jMenu1.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
-        overviewMenu.add(jMenu1);
+        menuSettings.setBorder(null);
+        menuSettings.setForeground(new java.awt.Color(255, 127, 0));
+        menuSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings_icon.png"))); // NOI18N
+        menuSettings.setContentAreaFilled(false);
+        menuSettings.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        menuSettings.setMinimumSize(new java.awt.Dimension(40, 40));
+        menuSettings.setPreferredSize(new java.awt.Dimension(40, 40));
+        overviewMenu.add(menuSettings);
 
+        menuAccount.setBackground(new java.awt.Color(40, 40, 40));
         menuAccount.setBorder(null);
         menuAccount.setForeground(new java.awt.Color(255, 127, 0));
-        menuAccount.setText("Account");
-        menuAccount.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        menuAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/account_icon.png"))); // NOI18N
+        menuAccount.setBorderPainted(false);
+        menuAccount.setMinimumSize(new java.awt.Dimension(40, 40));
+        menuAccount.setPreferredSize(new java.awt.Dimension(40, 40));
 
         miLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
-        miLogout.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        miLogout.setBackground(new java.awt.Color(40, 40, 40));
+        miLogout.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         miLogout.setForeground(new java.awt.Color(255, 127, 0));
+        miLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logout_icon.png"))); // NOI18N
         miLogout.setText("Logout");
         miLogout.setBorder(null);
+        miLogout.setBorderPainted(false);
+        miLogout.setPreferredSize(new java.awt.Dimension(150, 42));
+        miLogout.setRequestFocusEnabled(false);
+        miLogout.setSelected(true);
         miLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miLogoutActionPerformed(evt);
             }
         });
         menuAccount.add(miLogout);
+
+        miChangePassword.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, java.awt.event.InputEvent.CTRL_MASK));
+        miChangePassword.setBackground(new java.awt.Color(40, 40, 40));
+        miChangePassword.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        miChangePassword.setForeground(new java.awt.Color(255, 127, 0));
+        miChangePassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/password_icon.png"))); // NOI18N
+        miChangePassword.setText("Change password");
+        miChangePassword.setBorder(null);
+        miChangePassword.setBorderPainted(false);
+        miChangePassword.setMinimumSize(new java.awt.Dimension(200, 42));
+        miChangePassword.setPreferredSize(new java.awt.Dimension(200, 42));
+        miChangePassword.setRequestFocusEnabled(false);
+        miChangePassword.setSelected(true);
+        miChangePassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miChangePasswordActionPerformed(evt);
+            }
+        });
+        menuAccount.add(miChangePassword);
 
         overviewMenu.add(menuAccount);
 
@@ -496,10 +536,13 @@ public class Overview extends javax.swing.JFrame {
         Main.displayLogin();
     }//GEN-LAST:event_miLogoutActionPerformed
 
+    private void miChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miChangePasswordActionPerformed
+        Main.displayChangePassword();
+    }//GEN-LAST:event_miChangePasswordActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSearchCampaigns;
     private javax.swing.JLabel imgCampaign;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
@@ -523,6 +566,8 @@ public class Overview extends javax.swing.JFrame {
     private javax.swing.JList liMyCampaigns;
     private javax.swing.JList liMyCampaigns1;
     private javax.swing.JMenu menuAccount;
+    private javax.swing.JMenu menuSettings;
+    private javax.swing.JMenuItem miChangePassword;
     private javax.swing.JMenuItem miLogout;
     private javax.swing.JMenuBar overviewMenu;
     private javax.swing.JTextField tfSearchCampaigns;

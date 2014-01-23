@@ -9,6 +9,7 @@ package main;
 import view.*;
 import java.awt.Color;
 import java.util.*;
+import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -44,13 +45,22 @@ public class Main {
         frameOverview.setVisible(true);
     }
     
+    public static void displayChangePassword() {
+        ChangePassword frameChangePassword = new ChangePassword();
+        frameChangePassword.setVisible(true);
+    }
+    
     public static void main(String argv[]) throws Exception {
         UIManager.put("Menu.selectionBackground", Color.DARK_GRAY);
         UIManager.put("Menu.selectionForeground", Color.WHITE);
+        UIManager.put("Menu.border", BorderFactory.createEmptyBorder());
+        UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
         UIManager.put("MenuItem.selectionBackground", Color.DARK_GRAY);
         UIManager.put("MenuItem.selectionForeground", Color.WHITE);
         UIManager.put("MenuItem.background", Color.DARK_GRAY);
         UIManager.put("MenuItem.foreground", Color.WHITE);
+        UIManager.put("MenuItem.acceleratorForeground", Color.WHITE);
+        UIManager.put("MenuItem.acceleratorSelectionForeground", Color.WHITE);
         UIManager.put("Button.select", new java.awt.Color(255,127,0));
         UIManager.put("ComboBox.background", Color.GRAY);
         UIManager.put("ComboBox.buttonBackground", Color.GRAY);
@@ -61,7 +71,6 @@ public class Main {
         UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("List.focusCellHighlightBorder", new java.awt.Color(255,127,0));
-//        UIManager.put();
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
