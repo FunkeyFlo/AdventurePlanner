@@ -6,8 +6,7 @@
 
 package main;
 
-import view.Login;
-import view.Overview;
+import view.*;
 import java.awt.Color;
 import java.util.*;
 import javax.swing.SwingUtilities;
@@ -57,6 +56,10 @@ public class Main {
         UIManager.put("ComboBox.buttonBackground", Color.GRAY);
         UIManager.put("TextField.background", new java.awt.Color(102, 102, 102));
         UIManager.put("TextField.foreground", Color.WHITE);
+        UIManager.put("ScrollBar.background", new java.awt.Color(102, 102, 102));
+        UIManager.put("ScrollBar.foreground", new java.awt.Color(102, 102, 102));
+        UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
+        UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("List.focusCellHighlightBorder", new java.awt.Color(255,127,0));
 //        UIManager.put();
 
