@@ -11,7 +11,10 @@ public class User {
     private String username, firstName, lastName, password, email;
     private boolean isLoggedIn = false;
 
-    // Constructor.
+    // Constructors.
+    public User(){
+    }
+    
     public User(String firstName, String lastName, String username,
             int incorrectLogin, int userId, String email) {
         this.userId = userId;
@@ -24,9 +27,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public User() {
     }
 
     public String getFirstName() {

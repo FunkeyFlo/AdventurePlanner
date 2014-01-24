@@ -34,13 +34,13 @@ public class ServerActivity implements Runnable {
     
     public void run() {
         try {
+            System.out.println("Thread has been activated..");
             startServer();
         } catch (IOException ex) {
             System.out.println(ex.toString());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Thread has been activated..");
     }
     
     public void startServer() throws IOException, ClassNotFoundException {
