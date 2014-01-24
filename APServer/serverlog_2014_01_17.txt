@@ -1,6 +1,0 @@
-[Startup]	Server succesfuly started..
-
-[IP]	incomming request from: 127.0.0.1
-[SM]	knorrecheck:login
-[SM]	knorrecheck:getMyInfo
-

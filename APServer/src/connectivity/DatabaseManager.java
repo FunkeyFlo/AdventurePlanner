@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import main.ServerSettings;
 
 /**
  * @author Florentijn Cornet
@@ -23,8 +24,10 @@ public class DatabaseManager {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
-            String url = "jdbc:mysql://localhost/sce?zeroDateTimeBehavior=convertToNull";
-            String user = "root", pass = "1234";
+            String url = "jdbc:mysql://localhost/" + ServerSettings.getDbName()
+                    + "?zeroDateTimeBehavior=convertToNull";
+            String user = ServerSettings.getDbuser();
+            String pass = ServerSettings.getDbPassword();
 
             /**
              * Open connection

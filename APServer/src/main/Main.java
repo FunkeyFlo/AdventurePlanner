@@ -9,6 +9,9 @@ package main;
 //import connectivity.QueryManager;
 //import java.io.*;
 //import java.net.*;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -46,14 +49,20 @@ public class Main {
     }
     
     public static void startServer(){
-        if(!ServerActivity.running){
-            ServerActivity.running = true;
-            frameServerMonitor.writeToOutput("[Startup]\tServer succesfuly started..");
-        } else {
-            System.out.println("Server is already running");
-            JOptionPane.showMessageDialog(null, "Server is already running", "Error",
-                                JOptionPane.ERROR_MESSAGE);
+//        if(!ServerActivity.running){
+//            ServerActivity.running = true;
+//            frameServerMonitor.writeToOutput("[Startup]\tServer succesfuly started..");
+//        } else {
+//            System.out.println("Server is already running");
+//            JOptionPane.showMessageDialog(null, "Server is already running", "Error",
+//                                JOptionPane.ERROR_MESSAGE);
+//        }
+        try {
+            ServerSettings.setServerSettings();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        serverThread.start();
     }
     
     public static void main(String args[]) throws Exception {
@@ -68,7 +77,6 @@ public class Main {
             public void run() {
                 displayServerMonitor();
                 serverThread = new Thread(new ServerActivity(frameServerMonitor), "serverThread");
-                serverThread.start();
                 
 //                Session session = new Session();
 

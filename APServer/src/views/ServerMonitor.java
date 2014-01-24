@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 //import javax.swing.JOptionPane;
 import main.*;
 
@@ -32,10 +33,27 @@ public class ServerMonitor extends javax.swing.JFrame {
      */
     public ServerMonitor() {
         initComponents();
+        checkForConfig();
     }
     
     public void writeToOutput(String message){
         taMonitor.append(message + '\n');
+    }
+    
+    public void checkForConfig() {
+        File config = new File("config.properties");
+        if(!config.exists()){
+            noConfigFoundPopup();
+        }
+    }
+    
+    public void noConfigFoundPopup(){
+        if (JOptionPane.showConfirmDialog(null, "No config file was detected,"
+                    + " do you wish to create one?\nYou will need one to run the server.",
+                    "Request", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)
+                    == JOptionPane.YES_OPTION) {
+            Main.displayServerOptions();
+        }
     }
 
     /**
@@ -188,7 +206,12 @@ public class ServerMonitor extends javax.swing.JFrame {
     }//GEN-LAST:event_btStopServerActionPerformed
 
     private void btStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartServerActionPerformed
-        Main.startServer();
+        File config = new File("config.properties");
+        if(!config.exists()){
+            noConfigFoundPopup();
+        } else {
+            Main.startServer();
+        }
     }//GEN-LAST:event_btStartServerActionPerformed
 
     private void btSaveLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveLogActionPerformed
