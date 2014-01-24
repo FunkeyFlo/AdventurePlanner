@@ -36,6 +36,11 @@ public class Main {
         frameServerOptions.setVisible(true);
     }
     
+    public static void displayCreateUser() {
+        CreateUser frameCreateUser = new CreateUser();
+        frameCreateUser.setVisible(true);
+    }
+    
     public static void stopServer(){
         if(ServerActivity.running){
             ServerActivity.running = false;

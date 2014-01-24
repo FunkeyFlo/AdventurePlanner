@@ -6,6 +6,7 @@
 
 package main;
 
+import connectivity.BCrypt;
 import connectivity.QueryManager;
 import java.util.ArrayList;
 import model.User;
@@ -39,8 +40,10 @@ public class GlobalFunctions {
         try {
             user = query.getUserData(username);
             if (user.getUsername().equals(username)) {
-                if (user.getPassword().equals(password)) {
+                if (BCrypt.checkpw(password, user.getPassword())) {
                     user.setIsLoggedIn(true);
+                    System.out.println(user.getPassword());
+                    System.out.println(password);
                     return true;
                 } else {
                     return false;

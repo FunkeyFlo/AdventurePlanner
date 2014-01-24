@@ -53,8 +53,51 @@ public class QueryManager {
         return user;
     }
     
+    public void createUser(String username, String password, String firstName,
+            String lastName, String email) {
+        try {
+            db.openConnection();
+            password = BCrypt.hashpw(password, BCrypt.gensalt());
+            preparedStatement = db.connection.prepareStatement("INSERT INTO "
+                    + "`user`(`username`, `password`, `first_name`, `last_name`, `email`)"
+                    + "VALUES (?,?,?,?,?)");
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, firstName);
+            preparedStatement.setString(4, lastName);
+            preparedStatement.setString(5, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.closeConnection();
+        }
+    }
+    
+    public boolean checkUsernameAvailibility(String username){
+        boolean available = false;
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("SELECT `username`"
+                    + "FROM `user` WHERE `username` = ?");
+            preparedStatement.setString(1, username);
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                available = false;
+            } else {
+                available = true;
+            }
+        } catch(SQLException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.closeConnection();
+        }
+        return available;
+    }
+    
     public void changePassword(String password, String username) {
         try {
+            password = BCrypt.hashpw(password, BCrypt.gensalt());
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("UPDATE `user`"
                     + "SET `password` = ? WHERE `username` = ?");

@@ -30,16 +30,16 @@ public class ServerOptions extends javax.swing.JFrame {
      */
     public ServerOptions() {
         initComponents();
-//        try {
-//            ServerSettings.setServerSettings();
-//        } catch (FileNotFoundException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        tfDbUser.setText(ServerSettings.getDbuser());
-//        tfDbName.setText(ServerSettings.getDbName());
-//        tfDbPassword.setText(ServerSettings.getDbPassword());
-//        tfNetworkPort.setText(ServerSettings.getNetworkPort().toString());
+        try {
+            ServerSettings.setServerSettings();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        tfDbUser.setText(ServerSettings.getDbuser());
+        tfDbName.setText(ServerSettings.getDbName());
+        tfDbPassword.setText(ServerSettings.getDbPassword());
+        tfNetworkPort.setText(ServerSettings.getNetworkPort().toString());
         
         
     }

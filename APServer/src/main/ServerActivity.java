@@ -12,7 +12,6 @@ import connectivity.QueryManager;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.logging.*;
 import views.ServerMonitor;
 

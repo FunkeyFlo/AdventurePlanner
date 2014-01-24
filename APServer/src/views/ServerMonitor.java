@@ -74,9 +74,11 @@ public class ServerMonitor extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         taMonitor = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
-        mSettings = new javax.swing.JMenu();
+        menuSettings = new javax.swing.JMenu();
         miOptions = new javax.swing.JMenuItem();
-        mHelp = new javax.swing.JMenu();
+        menuUsers = new javax.swing.JMenu();
+        miCreateUser = new javax.swing.JMenuItem();
+        menuHelp = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SCE - Server Monitor");
@@ -159,7 +161,7 @@ public class ServerMonitor extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
         );
 
-        mSettings.setText("Settings");
+        menuSettings.setText("Settings");
 
         miOptions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
         miOptions.setText("Options");
@@ -168,12 +170,25 @@ public class ServerMonitor extends javax.swing.JFrame {
                 miOptionsActionPerformed(evt);
             }
         });
-        mSettings.add(miOptions);
+        menuSettings.add(miOptions);
 
-        jMenuBar1.add(mSettings);
+        jMenuBar1.add(menuSettings);
 
-        mHelp.setText("Help");
-        jMenuBar1.add(mHelp);
+        menuUsers.setText("Users");
+
+        miCreateUser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
+        miCreateUser.setText("Create user");
+        miCreateUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCreateUserActionPerformed(evt);
+            }
+        });
+        menuUsers.add(miCreateUser);
+
+        jMenuBar1.add(menuUsers);
+
+        menuHelp.setText("Help");
+        jMenuBar1.add(menuHelp);
 
         setJMenuBar(jMenuBar1);
 
@@ -234,6 +249,10 @@ public class ServerMonitor extends javax.swing.JFrame {
         Main.displayServerOptions();
     }//GEN-LAST:event_miOptionsActionPerformed
 
+    private void miCreateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCreateUserActionPerformed
+        Main.displayCreateUser();
+    }//GEN-LAST:event_miCreateUserActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClearLog;
     private javax.swing.JButton btSaveLog;
@@ -243,8 +262,10 @@ public class ServerMonitor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JMenu mHelp;
-    private javax.swing.JMenu mSettings;
+    private javax.swing.JMenu menuHelp;
+    private javax.swing.JMenu menuSettings;
+    private javax.swing.JMenu menuUsers;
+    private javax.swing.JMenuItem miCreateUser;
     private javax.swing.JMenuItem miOptions;
     private javax.swing.JTextArea taMonitor;
     // End of variables declaration//GEN-END:variables
