@@ -6,8 +6,7 @@
 
 package main;
 
-import model.Campaign;
-import model.User;
+import model.*;
 import connectivity.QueryManager;
 import java.io.*;
 import java.net.*;
@@ -111,6 +110,15 @@ public class ServerActivity implements Runnable {
                             ArrayList<Campaign> campaigns = query.searchCampaigns(param1);
                             ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
                             toClient.writeObject(campaigns);
+                            break;
+                        }
+                    case "getAdventures":
+                        {
+                            int param1 = Integer.parseInt(datas.get(3));
+
+                            ArrayList<Adventure> adventures = query.getAdventures(param1);
+                            ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
+                            toClient.writeObject(adventures);
                             break;
                         }
                     case "changePassword":

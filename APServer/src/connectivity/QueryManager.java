@@ -6,8 +6,7 @@
 
 package connectivity;
 
-import model.Campaign;
-import model.User;
+import model.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +24,7 @@ public class QueryManager {
     public final int MAX_INCORRECT_LOGINS = 3;
     public PreparedStatement preparedStatement = null;
     
-    // USER QUERIES ------------------------------------------------------------
+//-----USER-QUERIES-------------------------------------------------------------
     public User getUserData(String username) {
         User user = new User();
         try {
@@ -111,7 +110,7 @@ public class QueryManager {
         }
     }
     
-    // CAMPAIGN QUERIES --------------------------------------------------------
+//-----CAMPAIGN-QUERIES---------------------------------------------------------
     public ArrayList<Campaign> searchCampaigns(String searchArg) {
         ArrayList<Campaign> campaigns = new ArrayList<>();
         try {
@@ -135,5 +134,33 @@ public class QueryManager {
             db.closeConnection();
         }
         return campaigns;
+    }
+    
+//-----ADVENTURE-QUERIES--------------------------------------------------------
+    public ArrayList<Adventure> getAdventures(int campaignId) {
+        ArrayList<Adventure> adventures = new ArrayList<>();
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("SELECT * FROM "
+                    + "`adventure` WHERE `campaign_id` = ? ORDER BY `order_num`");
+            preparedStatement.setInt(1, campaignId);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                adventures.add(new Adventure(result.getInt("id"),
+                    result.getInt("campaign_id"),
+                    result.getInt("dm_id"),
+                    result.getInt("order_num"),
+                    result.getString("name"),
+                    result.getString("description"),
+                    result.getString("date")));
+            }
+        } catch (SQLException e) {
+            System.out.println(db.SQL_EXCEPTION + e.getMessage());
+        }
+        finally
+        {
+            db.closeConnection();
+        }
+        return adventures;
     }
 }

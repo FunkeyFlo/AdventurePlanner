@@ -12,24 +12,24 @@ package model;
  */
 public class Campaign implements java.io.Serializable {
     
-    private Integer campaignId, access;
-    private String campaignName, rpgName, description;
+    private Integer id, access;
+    private String name, rpgName, description;
 
-    public Campaign(Integer campaignId, Integer access, String campaignName,
+    public Campaign(Integer id, Integer access, String name,
             String rpgName, String description) {
-        this.campaignId = campaignId;
+        this.id = id;
         this.access = access;
-        this.campaignName = campaignName;
+        this.name = name;
         this.rpgName = rpgName;
         this.description = description;
     }
 
-    public Integer getCampaignId() {
-        return campaignId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCampaignId(Integer campaignId) {
-        this.campaignId = campaignId;
+    public void setId(Integer campaignId) {
+        this.id = campaignId;
     }
 
     public Integer getAccess() {
@@ -40,12 +40,12 @@ public class Campaign implements java.io.Serializable {
         this.access = access;
     }
 
-    public String getCampaignName() {
-        return campaignName;
+    public String getName() {
+        return name;
     }
 
-    public void setCampaignName(String campaignName) {
-        this.campaignName = campaignName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRpgName() {
@@ -65,6 +65,6 @@ public class Campaign implements java.io.Serializable {
     }
     
     public String toString() {
-        return getCampaignName();
+        return getName();
     }
 }

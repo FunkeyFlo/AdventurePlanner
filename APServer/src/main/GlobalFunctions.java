@@ -42,8 +42,6 @@ public class GlobalFunctions {
             if (user.getUsername().equals(username)) {
                 if (BCrypt.checkpw(password, user.getPassword())) {
                     user.setIsLoggedIn(true);
-                    System.out.println(user.getPassword());
-                    System.out.println(password);
                     return true;
                 } else {
                     return false;
