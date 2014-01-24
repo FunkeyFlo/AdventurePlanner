@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 //import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import main.*;
-import model.Campaign;
+import model.*;
 /**
  *
  * @author Flo
@@ -24,7 +24,9 @@ public class Overview extends javax.swing.JFrame {
     private final String FAILED_AUTHENTICATION_MESSAGE = "Authentication failed..";
     private final String NOTHING = "null";
     private ArrayList<Campaign> campaigns;
+    private ArrayList<Adventure> adventures;
     private DefaultListModel myCampaigns = new DefaultListModel();
+    private DefaultListModel myAdventures = new DefaultListModel();
     private final String GET_ALL = "ALL";
     private final String NO_MATCHES = "no matches were found";
     
@@ -36,6 +38,7 @@ public class Overview extends javax.swing.JFrame {
 //        overviewMenu.add(Box.createHorizontalGlue());
         
         liMyCampaigns.setModel(myCampaigns);
+        liMyAdventures.setModel(myAdventures);
         try {
 //            getMyInfo();
             getCampaigns(GET_ALL);
@@ -61,20 +64,13 @@ public class Overview extends javax.swing.JFrame {
         connection.close();
     }
     
-    public void setSelectedCampaign(int index){
-        try {
-            lblCampName.setText(campaigns.get(index).getCampaignName());
-            lblDescription.setText("<html>" + campaigns.get(index).getDescription()+ "</html>");
-            lblRPGType.setText(campaigns.get(index).getRpgName());
-            if(campaigns.get(index).getAccess() == 2){
-                lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Private 1.fw.png")));
-            } else {
-                lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 1.fw.png")));
-            }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println(e.toString());
-        }
-    }
+//    public void setAdventures(int index){
+//        try {
+//            
+//        } catch (IndexOutOfBoundsException e) {
+//            System.out.println(e.toString());
+//        }
+//    }
     
     public void getCampaigns(String searchArg) throws IOException {
         Socket connection = new Socket(Session.getCurrentServerIp(),
@@ -109,6 +105,69 @@ public class Overview extends javax.swing.JFrame {
         connection.close();
     }
     
+    public void getAdventures() throws IOException {
+        Socket connection = new Socket(Session.getCurrentServerIp(),
+                Session.getCurrentServerPort());
+        ArrayList<String> stream = new ArrayList<>();
+        
+        Campaign camp = (Campaign) liMyCampaigns.getSelectedValue();
+        String campId = camp.getId().toString();
+        System.out.println(camp.getId().toString());
+        
+        stream.add(Session.getCurrentUsername());
+        stream.add(Session.getCurrentPassword());
+        stream.add("getAdventures");
+        stream.add(campId);
+        
+        ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
+        toServer.writeObject(stream);
+        
+        try {
+            ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
+            adventures = (ArrayList) inStream.readObject();
+            if(adventures.isEmpty()){
+                myAdventures.removeAllElements();
+                myAdventures.addElement(NO_MATCHES);
+            } else {
+                myAdventures.removeAllElements();
+            
+                for (Adventure adventure : adventures) {
+                    myAdventures.addElement(adventure);
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        connection.close();
+    }
+    
+    public void setSelectedCampaign(int index){
+        try {
+            lblCampName.setText(campaigns.get(index).getName());
+            lblCampaignDescription.setText("<html>" + campaigns.get(index).getDescription()+ "</html>");
+            lblRPGType.setText(campaigns.get(index).getRpgName());
+            if(campaigns.get(index).getAccess() == 2){
+                lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Private 1.fw.png")));
+            } else {
+                lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 1.fw.png")));
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.toString());
+        }
+    }
+    
+    public void setSelectedAdventure(int index){
+        try {
+            lblAdventureName.setText(adventures.get(index).getName());
+            lblAdventureDescription.setText("<html>" + adventures.get(index).getDescription()+ "</html>");
+            lblDmName.setText(adventures.get(index).getDmId().toString());
+            lblAdventureDate.setText(adventures.get(index).getDate());
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.toString());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -132,16 +191,22 @@ public class Overview extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         imgCampaign = new javax.swing.JLabel();
         lblCampName = new javax.swing.JLabel();
-        lblDescription = new javax.swing.JLabel();
+        lblCampaignDescription = new javax.swing.JLabel();
         lblRPGType = new javax.swing.JLabel();
         lblAccess = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        liMyCampaigns1 = new javax.swing.JList();
+        liMyAdventures = new javax.swing.JList();
         lblAdventures = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
+        lblDmName = new javax.swing.JLabel();
+        lblAdventureName = new javax.swing.JLabel();
+        lblAdventureDescription = new javax.swing.JLabel();
+        lblAdventureOrderNumber = new javax.swing.JLabel();
+        lblAdventureDate = new javax.swing.JLabel();
         overviewMenu = new javax.swing.JMenuBar();
         menuSettings = new javax.swing.JMenu();
+        miOptions = new javax.swing.JMenuItem();
         menuAccount = new javax.swing.JMenu();
         miLogout = new javax.swing.JMenuItem();
         miChangePassword = new javax.swing.JMenuItem();
@@ -254,9 +319,9 @@ public class Overview extends javax.swing.JFrame {
         lblCampName.setForeground(new java.awt.Color(255, 255, 255));
         lblCampName.setText("Campaign Name");
 
-        lblDescription.setForeground(new java.awt.Color(190, 190, 190));
-        lblDescription.setText("Description");
-        lblDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblCampaignDescription.setForeground(new java.awt.Color(190, 190, 190));
+        lblCampaignDescription.setText("Description");
+        lblCampaignDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lblRPGType.setForeground(new java.awt.Color(255, 127, 0));
         lblRPGType.setText("RPG Type");
@@ -272,7 +337,7 @@ public class Overview extends javax.swing.JFrame {
                 .addComponent(imgCampaign, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblCampaignDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblRPGType)
@@ -297,7 +362,7 @@ public class Overview extends javax.swing.JFrame {
                                 .addComponent(lblRPGType))
                             .addComponent(lblAccess))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblCampaignDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -307,11 +372,16 @@ public class Overview extends javax.swing.JFrame {
         jScrollPane3.setBorder(null);
         jScrollPane3.setForeground(new java.awt.Color(66, 66, 66));
 
-        liMyCampaigns1.setBackground(new java.awt.Color(56, 56, 56));
-        liMyCampaigns1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        liMyCampaigns1.setForeground(new java.awt.Color(204, 204, 204));
-        liMyCampaigns1.setSelectionBackground(new java.awt.Color(255, 127, 0));
-        jScrollPane3.setViewportView(liMyCampaigns1);
+        liMyAdventures.setBackground(new java.awt.Color(56, 56, 56));
+        liMyAdventures.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        liMyAdventures.setForeground(new java.awt.Color(204, 204, 204));
+        liMyAdventures.setSelectionBackground(new java.awt.Color(255, 127, 0));
+        liMyAdventures.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                liMyAdventuresMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(liMyAdventures);
 
         lblAdventures.setFont(new java.awt.Font("Dialog", 1, 22)); // NOI18N
         lblAdventures.setForeground(new java.awt.Color(255, 255, 255));
@@ -335,15 +405,59 @@ public class Overview extends javax.swing.JFrame {
 
         jPanel9.setBackground(new java.awt.Color(40, 40, 40));
 
+        lblDmName.setForeground(new java.awt.Color(255, 127, 0));
+        lblDmName.setText("Dm Name");
+
+        lblAdventureName.setBackground(new java.awt.Color(66, 66, 66));
+        lblAdventureName.setFont(new java.awt.Font("Arial", 1, 26)); // NOI18N
+        lblAdventureName.setForeground(new java.awt.Color(255, 255, 255));
+        lblAdventureName.setText("Adventure Name");
+
+        lblAdventureDescription.setForeground(new java.awt.Color(190, 190, 190));
+        lblAdventureDescription.setText("Description");
+        lblAdventureDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblAdventureOrderNumber.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        lblAdventureOrderNumber.setForeground(new java.awt.Color(66, 66, 66));
+        lblAdventureOrderNumber.setText("1");
+
+        lblAdventureDate.setForeground(new java.awt.Color(255, 127, 0));
+        lblAdventureDate.setText("Date");
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAdventureDescription, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDmName)
+                            .addComponent(lblAdventureName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblAdventureOrderNumber))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblAdventureDate)))
+                .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAdventureName)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(lblDmName))
+                    .addComponent(lblAdventureOrderNumber))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAdventureDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAdventureDate)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -410,6 +524,25 @@ public class Overview extends javax.swing.JFrame {
         menuSettings.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
         menuSettings.setMinimumSize(new java.awt.Dimension(40, 40));
         menuSettings.setPreferredSize(new java.awt.Dimension(40, 40));
+
+        miOptions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
+        miOptions.setBackground(new java.awt.Color(40, 40, 40));
+        miOptions.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        miOptions.setForeground(new java.awt.Color(255, 127, 0));
+        miOptions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings_icon.png"))); // NOI18N
+        miOptions.setText("Options");
+        miOptions.setBorder(null);
+        miOptions.setBorderPainted(false);
+        miOptions.setPreferredSize(new java.awt.Dimension(150, 42));
+        miOptions.setRequestFocusEnabled(false);
+        miOptions.setSelected(true);
+        miOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miOptionsActionPerformed(evt);
+            }
+        });
+        menuSettings.add(miOptions);
+
         overviewMenu.add(menuSettings);
 
         menuAccount.setBackground(new java.awt.Color(40, 40, 40));
@@ -477,10 +610,14 @@ public class Overview extends javax.swing.JFrame {
 
     private void liMyCampaignsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_liMyCampaignsMouseClicked
         if (evt.getClickCount() == 2) {
-            //            System.out.println("Jeeeeeej");
             setSelectedCampaign(liMyCampaigns.getSelectedIndex());
+            try {
+                getAdventures();
+            } catch (IOException ex) {
+                Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            setSelectedAdventure(0);
         } else if (evt.getClickCount() == 3) {   // Triple-click
-            //            System.out.println("nope!");
         }
     }//GEN-LAST:event_liMyCampaignsMouseClicked
 
@@ -524,6 +661,17 @@ public class Overview extends javax.swing.JFrame {
         Main.displayChangePassword();
     }//GEN-LAST:event_miChangePasswordActionPerformed
 
+    private void miOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miOptionsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_miOptionsActionPerformed
+
+    private void liMyAdventuresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_liMyAdventuresMouseClicked
+        if (evt.getClickCount() == 2) {
+            setSelectedAdventure(liMyAdventures.getSelectedIndex());
+        } else if (evt.getClickCount() == 3) {   // Triple-click
+        }
+    }//GEN-LAST:event_liMyAdventuresMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSearchCampaigns;
     private javax.swing.JLabel imgCampaign;
@@ -539,16 +687,22 @@ public class Overview extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblAccess;
+    private javax.swing.JLabel lblAdventureDate;
+    private javax.swing.JLabel lblAdventureDescription;
+    private javax.swing.JLabel lblAdventureName;
+    private javax.swing.JLabel lblAdventureOrderNumber;
     private javax.swing.JLabel lblAdventures;
     private javax.swing.JLabel lblCampName;
-    private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblCampaignDescription;
+    private javax.swing.JLabel lblDmName;
     private javax.swing.JLabel lblRPGType;
+    private javax.swing.JList liMyAdventures;
     private javax.swing.JList liMyCampaigns;
-    private javax.swing.JList liMyCampaigns1;
     private javax.swing.JMenu menuAccount;
     private javax.swing.JMenu menuSettings;
     private javax.swing.JMenuItem miChangePassword;
     private javax.swing.JMenuItem miLogout;
+    private javax.swing.JMenuItem miOptions;
     private javax.swing.JMenuBar overviewMenu;
     private javax.swing.JTextField tfSearchCampaigns;
     // End of variables declaration//GEN-END:variables
