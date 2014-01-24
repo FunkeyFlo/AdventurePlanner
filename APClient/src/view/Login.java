@@ -41,9 +41,11 @@ public class Login extends javax.swing.JFrame {
     public void doLogin() throws IOException {
         String username = tfUsername.getText();
         String password = tfPassword.getText();
+        String serverAddress = cbServers.getSelectedItem().toString().trim();
+        int serverPort = Integer.parseInt(tfPort.getText().trim());
         ArrayList<String> stream = new ArrayList<>();
         
-        Socket connection = new Socket(cbServers.getSelectedItem().toString().trim(), 1226);
+        Socket connection = new Socket(serverAddress, serverPort);
         
         stream.add(username);
         stream.add(password);
@@ -59,8 +61,8 @@ public class Login extends javax.swing.JFrame {
         if(line.equals("Login succesful!")){
             Session.setCurrentUsername(username);
             Session.setCurrentPassword(password);
-            Session.setCurrentServerIp(cbServers.getSelectedItem().toString().trim());
-            Session.setCurrentServerPort(1226);
+            Session.setCurrentServerIp(serverAddress);
+            Session.setCurrentServerPort(serverPort);
             
             Main.displayOverview();
             
@@ -98,9 +100,10 @@ public class Login extends javax.swing.JFrame {
         btClose = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         cbServers = new javax.swing.JComboBox();
+        tfPort = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setIconImage(getToolkit().getImage(getClass().getResource("/img/dock_icon.png")));
+        setIconImage(getToolkit().getImage(getClass().getResource("/img/account_icon.png")));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
@@ -174,9 +177,24 @@ public class Login extends javax.swing.JFrame {
         cbServers.setForeground(new java.awt.Color(204, 204, 204));
         cbServers.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "localhost", "83.160.96.155" }));
         cbServers.setOpaque(false);
+        cbServers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbServersActionPerformed(evt);
+            }
+        });
         cbServers.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 cbServersKeyPressed(evt);
+            }
+        });
+
+        tfPort.setBackground(new java.awt.Color(102, 102, 102));
+        tfPort.setForeground(new java.awt.Color(204, 204, 204));
+        tfPort.setText("1226");
+        tfPort.setBorder(null);
+        tfPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfPortKeyPressed(evt);
             }
         });
 
@@ -187,6 +205,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -197,16 +216,20 @@ public class Login extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btClose, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(tfUsername)
-                            .addComponent(cbServers, 0, 218, Short.MAX_VALUE)
-                            .addComponent(tfPassword))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(cbServers, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfPort))
+                            .addComponent(tfPassword)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btClose, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -223,10 +246,12 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cbServers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbServers, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
+                    .addComponent(tfPort))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
                     .addComponent(btClose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -297,6 +322,14 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbServersKeyPressed
 
+    private void tfPortKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPortKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfPortKeyPressed
+
+    private void cbServersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbServersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbServersActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClose;
     private javax.swing.JButton btLogin;
@@ -307,6 +340,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField tfPassword;
+    private javax.swing.JTextField tfPort;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }

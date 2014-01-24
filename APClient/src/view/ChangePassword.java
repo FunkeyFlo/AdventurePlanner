@@ -215,6 +215,7 @@ public class ChangePassword extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfOldPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfOldPasswordKeyPressed
