@@ -7,9 +7,6 @@
 package views;
 
 import java.io.*;
-//import java.net.*;
-//import static main.TestServer.*;
-//import models.*;
 import connectivity.QueryManager;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,7 +14,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-//import javax.swing.JOptionPane;
 import main.*;
 
 /**

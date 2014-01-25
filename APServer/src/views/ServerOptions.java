@@ -35,13 +35,10 @@ public class ServerOptions extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         tfDbUser.setText(ServerSettings.getDbuser());
         tfDbName.setText(ServerSettings.getDbName());
         tfDbPassword.setText(ServerSettings.getDbPassword());
         tfNetworkPort.setText(ServerSettings.getNetworkPort().toString());
-        
-        
     }
 
     public void createConfig(){
@@ -54,28 +51,26 @@ public class ServerOptions extends javax.swing.JFrame {
         String networkPort = tfNetworkPort.getText().trim();
  
 	try {
- 
-		output = new FileOutputStream("config.properties");
- 
-		// set the properties value
-		prop.setProperty("database_name", dbName);
-		prop.setProperty("database_user", dbUser);
-		prop.setProperty("database_password", dbPassword);
-		prop.setProperty("network_port", networkPort);
- 
-		// save properties to project root folder
-		prop.store(output, null);
- 
+            output = new FileOutputStream("config.properties");
+
+            // set the properties value
+            prop.setProperty("database_name", dbName);
+            prop.setProperty("database_user", dbUser);
+            prop.setProperty("database_password", dbPassword);
+            prop.setProperty("network_port", networkPort);
+
+            // save properties to project root folder
+            prop.store(output, null);
 	} catch (IOException io) {
-		io.printStackTrace();
+            io.printStackTrace();
 	} finally {
-		if (output != null) {
-			try {
-				output.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 	}
     }
     
