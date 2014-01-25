@@ -136,17 +136,17 @@ public class QueryManager {
         return campaigns;
     }
     
-//-----ADVENTURE-QUERIES--------------------------------------------------------
-    public ArrayList<Adventure> getAdventures(int campaignId) {
-        ArrayList<Adventure> adventures = new ArrayList<>();
+//-----EPISODE-QUERIES----------------------------------------------------------
+    public ArrayList<Episode> getEpisodes(int campaignId) {
+        ArrayList<Episode> episodes = new ArrayList<>();
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`adventure` WHERE `campaign_id` = ? ORDER BY `order_num`");
+                    + "`episode` WHERE `campaign_id` = ? ORDER BY `order_num`");
             preparedStatement.setInt(1, campaignId);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
-                adventures.add(new Adventure(result.getInt("id"),
+                episodes.add(new Episode(result.getInt("id"),
                     result.getInt("campaign_id"),
                     result.getInt("dm_id"),
                     result.getInt("order_num"),
@@ -161,6 +161,6 @@ public class QueryManager {
         {
             db.closeConnection();
         }
-        return adventures;
+        return episodes;
     }
 }

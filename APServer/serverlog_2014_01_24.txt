@@ -1,0 +1,285 @@
+[NETWORK]	Server running on port: 1226
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:login
+[SM]	funkeyflo:getCampaigns
+[SM]	autumnbeast:login
+[SM]	autumnbeast:getCampaigns
+[SM]	pjotr49:login
+[SM]	pjotr49:getCampaigns
+
+[IP]	incomming request from: 83.160.96.155
+[SM]	pjotr49:login
+[SM]	pjotr49:getCampaigns
+[SM]	pjotr49:login
+[SM]	pjotr49:getCampaigns
+[SM]	pjotr49:getCampaigns
+[SM]	pjotr49:getCampaigns
+[SM]	pjotr49:login
+[SM]	pjotr49:getCampaigns
+[SM]	funkeyflo:login
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:changePassword
+
+[IP]	incomming request from: 192.168.178.84
+[SM]	funkeyflo:login
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:login
+[ERROR]	Authentication failed
+[SM]	knorrecheck:login
+[ERROR]	Authentication failed
+[SM]	knorrecheck:login
+[ERROR]	Authentication failed
+[SM]	knorrecheck:login
+[ERROR]	Authentication failed
+[SM]	knorrecheck:login
+[ERROR]	Authentication failed
+[SM]	knorrecheck:login
+[ERROR]	Authentication failed
+[SM]	knorrecheck:login
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:login
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:login
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:login
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+
+[IP]	incomming request from: 127.0.0.1
+[SM]	funkeyflo:getCampaigns
+[SM]	funkeyflo:getCampaigns
+
+[IP]	incomming request from: 217.121.244.210
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+[SM]	knorrecheck:getCampaigns
+

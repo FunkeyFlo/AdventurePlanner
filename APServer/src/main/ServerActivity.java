@@ -112,13 +112,13 @@ public class ServerActivity implements Runnable {
                             toClient.writeObject(campaigns);
                             break;
                         }
-                    case "getAdventures":
+                    case "getEpisodes":
                         {
                             int param1 = Integer.parseInt(datas.get(3));
 
-                            ArrayList<Adventure> adventures = query.getAdventures(param1);
+                            ArrayList<Episode> episodes = query.getEpisodes(param1);
                             ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
-                            toClient.writeObject(adventures);
+                            toClient.writeObject(episodes);
                             break;
                         }
                     case "changePassword":
