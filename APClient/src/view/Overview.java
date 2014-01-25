@@ -324,9 +324,11 @@ public class Overview extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(51, 51, 51));
         jPanel6.setMinimumSize(null);
+        jPanel6.setPreferredSize(null);
 
         jPanel7.setBackground(new java.awt.Color(40, 40, 40));
         jPanel7.setMinimumSize(new java.awt.Dimension(0, 173));
+        jPanel7.setPreferredSize(new java.awt.Dimension(710, 173));
 
         imgCampaign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/knight.png"))); // NOI18N
         imgCampaign.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 66, 66), 4));
@@ -384,6 +386,7 @@ public class Overview extends javax.swing.JFrame {
         );
 
         jPanel8.setBackground(new java.awt.Color(56, 56, 56));
+        jPanel8.setPreferredSize(new java.awt.Dimension(146, 202));
 
         jScrollPane3.setBackground(new java.awt.Color(66, 66, 66));
         jScrollPane3.setBorder(null);
@@ -422,6 +425,7 @@ public class Overview extends javax.swing.JFrame {
 
         jPanel9.setBackground(new java.awt.Color(40, 40, 40));
         jPanel9.setMinimumSize(null);
+        jPanel9.setPreferredSize(new java.awt.Dimension(254, 114));
 
         lblDmName.setForeground(new java.awt.Color(255, 127, 0));
         lblDmName.setText("Dm Name");
@@ -480,6 +484,7 @@ public class Overview extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(40, 40, 40));
         jPanel1.setMinimumSize(null);
+        jPanel1.setPreferredSize(null);
 
         lblCharacterName.setFont(new java.awt.Font("Dialog", 1, 21)); // NOI18N
         lblCharacterName.setForeground(new java.awt.Color(255, 255, 255));
@@ -575,7 +580,7 @@ public class Overview extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -586,7 +591,7 @@ public class Overview extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
