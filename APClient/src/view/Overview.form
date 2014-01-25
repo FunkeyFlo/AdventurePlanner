@@ -572,13 +572,13 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jScrollPane3" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="lblAdventures" alignment="0" pref="146" max="32767" attributes="0"/>
+                              <Component id="lblEpisodes" alignment="0" pref="146" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="lblAdventures" max="32767" attributes="0"/>
+                                  <Component id="lblEpisodes" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jScrollPane3" min="-2" pref="167" max="-2" attributes="0"/>
                               </Group>
@@ -604,7 +604,7 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JList" name="liMyAdventures">
+                            <Component class="javax.swing.JList" name="liMyEpisodes">
                               <Properties>
                                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="38" green="38" red="38" type="rgb"/>
@@ -623,12 +623,12 @@
                                 </Property>
                               </Properties>
                               <Events>
-                                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="liMyAdventuresMouseClicked"/>
+                                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="liMyEpisodesMouseClicked"/>
                               </Events>
                             </Component>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JLabel" name="lblAdventures">
+                        <Component class="javax.swing.JLabel" name="lblEpisodes">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Dialog" size="22" style="1"/>
@@ -637,7 +637,7 @@
                               <Color blue="ff" green="ff" red="ff" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="0"/>
-                            <Property name="text" type="java.lang.String" value="Adventures"/>
+                            <Property name="text" type="java.lang.String" value="Episodes"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -655,18 +655,18 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblAdventureDescription" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="lblEpisodeDescription" alignment="1" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="lblDmName" min="-2" max="-2" attributes="0"/>
-                                              <Component id="lblAdventureName" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblEpisodeName" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="lblAdventureOrderNumber" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblEpisodeOrderNumber" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="lblAdventureDate" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblEpisodeDate" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -678,17 +678,17 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblAdventureName" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblEpisodeName" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                                           <Component id="lblDmName" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="lblAdventureOrderNumber" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblEpisodeOrderNumber" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblAdventureDescription" max="32767" attributes="0"/>
+                                  <Component id="lblEpisodeDescription" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblAdventureDate" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblEpisodeDate" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -703,7 +703,7 @@
                             <Property name="text" type="java.lang.String" value="Dm Name"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="lblAdventureName">
+                        <Component class="javax.swing.JLabel" name="lblEpisodeName">
                           <Properties>
                             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="42" green="42" red="42" type="rgb"/>
@@ -717,7 +717,7 @@
                             <Property name="text" type="java.lang.String" value="Adventure Name"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="lblAdventureDescription">
+                        <Component class="javax.swing.JLabel" name="lblEpisodeDescription">
                           <Properties>
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="be" green="be" red="be" type="rgb"/>
@@ -726,7 +726,7 @@
                             <Property name="verticalAlignment" type="int" value="1"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="lblAdventureOrderNumber">
+                        <Component class="javax.swing.JLabel" name="lblEpisodeOrderNumber">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Dialog" size="36" style="0"/>
@@ -737,7 +737,7 @@
                             <Property name="text" type="java.lang.String" value="1"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="lblAdventureDate">
+                        <Component class="javax.swing.JLabel" name="lblEpisodeDate">
                           <Properties>
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="7f" red="ff" type="rgb"/>

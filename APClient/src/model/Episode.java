@@ -10,7 +10,7 @@ package model;
  *
  * @author Flo
  */
-public class Adventure implements java.io.Serializable{
+public class Episode implements java.io.Serializable{
     
     private Integer id;
     private Integer campaignId;
@@ -20,7 +20,7 @@ public class Adventure implements java.io.Serializable{
     private String description;
     private String date;
 
-    public Adventure(Integer id, Integer campaignId, Integer dmId,
+    public Episode(Integer id, Integer campaignId, Integer dmId,
             Integer orderNumber, String name, String description, String date) {
         this.id = id;
         this.campaignId = campaignId;
