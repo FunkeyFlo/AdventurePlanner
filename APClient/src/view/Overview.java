@@ -177,6 +177,7 @@ public class Overview extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         tfSearchCampaigns = new javax.swing.JTextField();
         btSearchCampaigns = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel6 = new javax.swing.JPanel();
@@ -197,6 +198,14 @@ public class Overview extends javax.swing.JFrame {
         lblEpisodeOrderNumber = new javax.swing.JLabel();
         lblEpisodeDate = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        lblCharacterName = new javax.swing.JLabel();
+        lblEpisodeDescription1 = new javax.swing.JLabel();
+        lblCharacterClass = new javax.swing.JLabel();
+        lblCharacterLevel = new javax.swing.JLabel();
+        lblLevel = new javax.swing.JLabel();
+        imgCampaign2 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
         overviewMenu = new javax.swing.JMenuBar();
         menuSettings = new javax.swing.JMenu();
         miOptions = new javax.swing.JMenuItem();
@@ -213,8 +222,8 @@ public class Overview extends javax.swing.JFrame {
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setBackground(new java.awt.Color(66, 66, 66));
-        jPanel2.setMinimumSize(new java.awt.Dimension(187, 159));
-        jPanel2.setPreferredSize(new java.awt.Dimension(187, 159));
+        jPanel2.setMinimumSize(new java.awt.Dimension(220, 159));
+        jPanel2.setPreferredSize(new java.awt.Dimension(220, 159));
 
         jScrollPane2.setBackground(new java.awt.Color(66, 66, 66));
         jScrollPane2.setBorder(null);
@@ -261,7 +270,7 @@ public class Overview extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addComponent(tfSearchCampaigns, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfSearchCampaigns)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btSearchCampaigns, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -273,19 +282,30 @@ public class Overview extends javax.swing.JFrame {
             .addComponent(btSearchCampaigns, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jButton1.setBackground(new java.awt.Color(40, 40, 40));
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Create a new campaign");
+        jButton1.setBorder(null);
+        jButton1.setBorderPainted(false);
+        jButton1.setRequestFocusEnabled(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -300,6 +320,7 @@ public class Overview extends javax.swing.JFrame {
         jScrollPane1.setAutoscrolls(true);
         jScrollPane1.setFocusable(false);
         jScrollPane1.setMinimumSize(null);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 0));
 
         jPanel6.setBackground(new java.awt.Color(51, 51, 51));
         jPanel6.setMinimumSize(null);
@@ -313,7 +334,7 @@ public class Overview extends javax.swing.JFrame {
         lblCampName.setBackground(new java.awt.Color(66, 66, 66));
         lblCampName.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
         lblCampName.setForeground(new java.awt.Color(255, 255, 255));
-        lblCampName.setText("Campaign Name");
+        lblCampName.setText("Campaign name");
 
         lblCampaignDescription.setForeground(new java.awt.Color(190, 190, 190));
         lblCampaignDescription.setText("Description");
@@ -338,7 +359,7 @@ public class Overview extends javax.swing.JFrame {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblRPGType)
                             .addComponent(lblCampName))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 207, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
                         .addComponent(lblAccess)))
                 .addContainerGap())
         );
@@ -400,6 +421,7 @@ public class Overview extends javax.swing.JFrame {
         );
 
         jPanel9.setBackground(new java.awt.Color(40, 40, 40));
+        jPanel9.setMinimumSize(null);
 
         lblDmName.setForeground(new java.awt.Color(255, 127, 0));
         lblDmName.setText("Dm Name");
@@ -407,7 +429,7 @@ public class Overview extends javax.swing.JFrame {
         lblEpisodeName.setBackground(new java.awt.Color(66, 66, 66));
         lblEpisodeName.setFont(new java.awt.Font("Arial", 1, 26)); // NOI18N
         lblEpisodeName.setForeground(new java.awt.Color(255, 255, 255));
-        lblEpisodeName.setText("Adventure Name");
+        lblEpisodeName.setText("Adventure name");
 
         lblEpisodeDescription.setForeground(new java.awt.Color(190, 190, 190));
         lblEpisodeDescription.setText("Description");
@@ -457,16 +479,88 @@ public class Overview extends javax.swing.JFrame {
         );
 
         jPanel1.setBackground(new java.awt.Color(40, 40, 40));
+        jPanel1.setMinimumSize(null);
+
+        lblCharacterName.setFont(new java.awt.Font("Dialog", 1, 21)); // NOI18N
+        lblCharacterName.setForeground(new java.awt.Color(255, 255, 255));
+        lblCharacterName.setText("Character name");
+
+        lblEpisodeDescription1.setForeground(new java.awt.Color(190, 190, 190));
+        lblEpisodeDescription1.setText("Description");
+        lblEpisodeDescription1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblCharacterClass.setForeground(new java.awt.Color(255, 127, 0));
+        lblCharacterClass.setText("Character class");
+
+        lblCharacterLevel.setFont(new java.awt.Font("Dialog", 0, 21)); // NOI18N
+        lblCharacterLevel.setForeground(new java.awt.Color(255, 127, 0));
+        lblCharacterLevel.setText("1");
+
+        lblLevel.setForeground(new java.awt.Color(222, 222, 223));
+        lblLevel.setText("Level");
+
+        imgCampaign2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/knight.png"))); // NOI18N
+        imgCampaign2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 66, 66), 4));
+
+        jScrollPane5.setBorder(null);
+
+        jList1.setBackground(new java.awt.Color(56, 56, 56));
+        jList1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        jList1.setForeground(new java.awt.Color(204, 204, 204));
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Hordrick", "Hendrick", "Pastanza" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jList1.setFixedCellWidth(70);
+        jList1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        jList1.setSelectionBackground(new java.awt.Color(255, 127, 0));
+        jList1.setSelectionForeground(new java.awt.Color(40, 40, 40));
+        jList1.setVisibleRowCount(1);
+        jScrollPane5.setViewportView(jList1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imgCampaign2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCharacterName)
+                            .addComponent(lblCharacterClass))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblLevel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCharacterLevel))
+                    .addComponent(lblEpisodeDescription1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(jScrollPane5)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 133, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblCharacterName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblCharacterClass))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblCharacterLevel)
+                                .addComponent(lblLevel)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblEpisodeDescription1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(imgCampaign2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -494,8 +588,8 @@ public class Overview extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel6);
@@ -504,7 +598,7 @@ public class Overview extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -520,7 +614,7 @@ public class Overview extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(jPanel3, gridBagConstraints);
 
-        overviewMenu.setBackground(new java.awt.Color(40, 40, 40));
+        overviewMenu.setBackground(new java.awt.Color(30, 30, 30));
         overviewMenu.setBorder(null);
         overviewMenu.setForeground(new java.awt.Color(51, 51, 51));
         overviewMenu.setBorderPainted(false);
@@ -538,7 +632,7 @@ public class Overview extends javax.swing.JFrame {
         menuSettings.setPreferredSize(new java.awt.Dimension(40, 40));
 
         miOptions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
-        miOptions.setBackground(new java.awt.Color(40, 40, 40));
+        miOptions.setBackground(new java.awt.Color(30, 30, 30));
         miOptions.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         miOptions.setForeground(new java.awt.Color(255, 127, 0));
         miOptions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings_icon.png"))); // NOI18N
@@ -566,7 +660,7 @@ public class Overview extends javax.swing.JFrame {
         menuAccount.setPreferredSize(new java.awt.Dimension(40, 40));
 
         miLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
-        miLogout.setBackground(new java.awt.Color(40, 40, 40));
+        miLogout.setBackground(new java.awt.Color(30, 30, 30));
         miLogout.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         miLogout.setForeground(new java.awt.Color(255, 127, 0));
         miLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logout_icon.png"))); // NOI18N
@@ -584,7 +678,7 @@ public class Overview extends javax.swing.JFrame {
         menuAccount.add(miLogout);
 
         miChangePassword.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, java.awt.event.InputEvent.CTRL_MASK));
-        miChangePassword.setBackground(new java.awt.Color(40, 40, 40));
+        miChangePassword.setBackground(new java.awt.Color(30, 30, 30));
         miChangePassword.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         miChangePassword.setForeground(new java.awt.Color(255, 127, 0));
         miChangePassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/password_icon.png"))); // NOI18N
@@ -614,7 +708,7 @@ public class Overview extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
         );
 
         pack();
@@ -687,6 +781,9 @@ public class Overview extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSearchCampaigns;
     private javax.swing.JLabel imgCampaign;
+    private javax.swing.JLabel imgCampaign2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -702,16 +799,22 @@ public class Overview extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAccess;
     private javax.swing.JLabel lblCampName;
     private javax.swing.JLabel lblCampaignDescription;
+    private javax.swing.JLabel lblCharacterClass;
+    private javax.swing.JLabel lblCharacterLevel;
+    private javax.swing.JLabel lblCharacterName;
     private javax.swing.JLabel lblDmName;
     private javax.swing.JLabel lblEpisodeDate;
     private javax.swing.JLabel lblEpisodeDescription;
+    private javax.swing.JLabel lblEpisodeDescription1;
     private javax.swing.JLabel lblEpisodeName;
     private javax.swing.JLabel lblEpisodeOrderNumber;
     private javax.swing.JLabel lblEpisodes;
     private javax.swing.JLabel lblEpisodes1;
+    private javax.swing.JLabel lblLevel;
     private javax.swing.JLabel lblRPGType;
     private javax.swing.JList liMyCampaigns;
     private javax.swing.JList liMyEpisodes;
