@@ -79,35 +79,49 @@ public class ServerActivity implements Runnable {
                         }
                     case "getMyInfo":
                         {
-                            OutputStream toClient = connection.getOutputStream();
-                            PrintStream ps = new PrintStream(toClient, true);
+                            ArrayList<String> userInfo = new ArrayList<>();
+                            ObjectOutputStream toClient = new ObjectOutputStream(
+                                    connection.getOutputStream());
 
                             User requestedUser = query.getUserData(username);
                             String clientsUsername = requestedUser.getUsername();
+                            Integer clientsUserId = requestedUser.getUserId();
                             String clientsFirstName = requestedUser.getFirstName();
                             String clientsLastName = requestedUser.getLastName();
                             String clientsEmail = requestedUser.getEmail();
 
-                            ps.println(clientsUsername
-                                    + ":" + clientsFirstName
-                                    + ":" + clientsLastName
-                                    + ":" + clientsEmail);
+                            userInfo.add(clientsUsername);
+                            userInfo.add(clientsUserId.toString());
+                            userInfo.add(clientsFirstName);
+                            userInfo.add(clientsLastName);
+                            userInfo.add(clientsEmail);
+                            
+                            toClient.writeObject(userInfo);
                             break;
                         }
                     case "getMyCampaigns":
                         {
-                            System.out.println("not yet implemented");
+                            Integer userId = Integer.parseInt(datas.get(3));
+                            String searchArg = datas.get(4);
+
+                            if(searchArg.equals("ALL")){
+                                searchArg = "";
+                            }
+
+                            ArrayList<Campaign> campaigns = query.searchMyCampaigns(userId, searchArg);
+                            ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
+                            toClient.writeObject(campaigns);
                             break;
                         }
                     case "getCampaigns":
                         {
-                            String param1 = datas.get(3);
+                            String searchArg = datas.get(3);
 
-                            if(param1.equals("ALL")){
-                                param1 = "";
+                            if(searchArg.equals("ALL")){
+                                searchArg = "";
                             }
 
-                            ArrayList<Campaign> campaigns = query.searchCampaigns(param1);
+                            ArrayList<Campaign> campaigns = query.searchCampaigns(searchArg);
                             ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
                             toClient.writeObject(campaigns);
                             break;

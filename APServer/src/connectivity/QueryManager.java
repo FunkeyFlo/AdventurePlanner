@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class QueryManager {
     
     private final DatabaseManager db = new DatabaseManager();
-    public final int MAX_INCORRECT_LOGINS = 3;
+    public final int DEFAULT_INCORRECT_LOGIN = 0;
     public PreparedStatement preparedStatement = null;
     
 //-----USER-QUERIES-------------------------------------------------------------
@@ -30,7 +30,7 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`user` WHERE `username`= ?");
+                    + "`users` WHERE `username`= ? LIMIT 1");
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
@@ -58,13 +58,15 @@ public class QueryManager {
             db.openConnection();
             password = BCrypt.hashpw(password, BCrypt.gensalt());
             preparedStatement = db.connection.prepareStatement("INSERT INTO "
-                    + "`user`(`username`, `password`, `first_name`, `last_name`, `email`)"
-                    + "VALUES (?,?,?,?,?)");
+                    + "`users`(`username`, `password`, `first_name`, `last_name`,"
+                    + "`email`, `incorrect_login`)"
+                    + "VALUES (?,?,?,?,?,?)");
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, firstName);
             preparedStatement.setString(4, lastName);
             preparedStatement.setString(5, email);
+            preparedStatement.setInt(6, DEFAULT_INCORRECT_LOGIN);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,7 +80,7 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT `username`"
-                    + "FROM `user` WHERE `username` = ?");
+                    + "FROM `users` WHERE `username` = ? LIMIT 1");
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
@@ -98,8 +100,8 @@ public class QueryManager {
         try {
             password = BCrypt.hashpw(password, BCrypt.gensalt());
             db.openConnection();
-            preparedStatement = db.connection.prepareStatement("UPDATE `user`"
-                    + "SET `password` = ? WHERE `username` = ?");
+            preparedStatement = db.connection.prepareStatement("UPDATE `users`"
+                    + "SET `password` = ? WHERE `username` = ? LIMIT 1");
             preparedStatement.setString(1, password);
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
@@ -116,14 +118,47 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`campaign` WHERE `name` LIKE ? ORDER BY `name`");
+                    + "`campaigns` WHERE `name` LIKE ? ORDER BY `name`");
             preparedStatement.setString(1, '%' + searchArg + '%');
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 campaigns.add(new Campaign(result.getInt("id"),
                     result.getInt("access"),
                     result.getString("name"),
-                    result.getString("rpg_name"),
+                    result.getString("rpg_type"),
+                    result.getString("description")));
+            }
+        } catch (SQLException e) {
+            System.out.println(db.SQL_EXCEPTION + e.getMessage());
+        }
+        finally
+        {
+            db.closeConnection();
+        }
+        return campaigns;
+    }
+    
+    public ArrayList<Campaign> searchMyCampaigns(int userId, String searchArg) {
+        ArrayList<Campaign> campaigns = new ArrayList<>();
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement(""
+                    + "SELECT campaigns.id, campaigns.name, campaigns.access,"
+                        + "campaigns.rpg_type, campaigns.description "
+                    + "FROM campaigns "
+                    + "JOIN users_has_campaigns "
+                    + "ON campaigns.id = users_has_campaigns.campaigns_id "
+                    + "WHERE users_has_campaigns.users_id = ? "
+                    + "AND campaigns.name LIKE ? "
+                    + "ORDER BY campaigns.name");
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, '%' + searchArg + '%');
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                campaigns.add(new Campaign(result.getInt("id"),
+                    result.getInt("access"),
+                    result.getString("name"),
+                    result.getString("rpg_type"),
                     result.getString("description")));
             }
         } catch (SQLException e) {
@@ -142,14 +177,14 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`episode` WHERE `campaign_id` = ? ORDER BY `order_num`");
+                    + "`episodes` WHERE `campaigns_id` = ? ORDER BY `order_number`");
             preparedStatement.setInt(1, campaignId);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 episodes.add(new Episode(result.getInt("id"),
-                    result.getInt("campaign_id"),
-                    result.getInt("dm_id"),
-                    result.getInt("order_num"),
+                    result.getInt("campaigns_id"),
+                    result.getInt("users_id"),
+                    result.getInt("order_number"),
                     result.getString("name"),
                     result.getString("description"),
                     result.getString("date")));
