@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import main.*;
 import model.*;
@@ -35,66 +34,104 @@ public class Overview extends javax.swing.JFrame {
      */
     public Overview() {
         initComponents();
-//        overviewMenu.add(Box.createHorizontalGlue());
         
         liMyCampaigns.setModel(myCampaigns);
         liMyEpisodes.setModel(myEpisodes);
         try {
-//            getMyInfo();
-            getCampaigns(GET_ALL);
+            getMyInfo();
+            getMyCampaigns(GET_ALL);
             setSelectedCampaign(0);
         } catch(IOException e) {
             System.out.println(e.toString());
-        }
-    }
-    
-    public void getMyInfo() throws IOException {
-        Socket connection = new Socket(Session.getCurrentServerIp(),
-                Session.getCurrentServerPort());
-        OutputStream toServer = connection.getOutputStream();
-        PrintStream ps = new PrintStream(toServer, true);
-        
-        ps.println((Session.getCurrentUsername() + ":"
-                + Session.getCurrentPassword() + ":getMyInfo"));
-        
-        InputStream in = connection.getInputStream();
-        BufferedReader fromServer = new BufferedReader(new InputStreamReader(in));
-        String line = fromServer.readLine();
-        
-        connection.close();
-    }
-    
-    public void getCampaigns(String searchArg) throws IOException {
-        Socket connection = new Socket(Session.getCurrentServerIp(),
-                Session.getCurrentServerPort());
-        ArrayList<String> stream = new ArrayList<>();
-        
-        stream.add(Session.getCurrentUsername());
-        stream.add(Session.getCurrentPassword());
-        stream.add("getCampaigns");
-        stream.add(searchArg);
-        
-        ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
-        toServer.writeObject(stream);
-        
-        try {
-            ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
-            campaigns = (ArrayList) inStream.readObject();
-            if(campaigns.isEmpty()){
-                myCampaigns.removeAllElements();
-                myCampaigns.addElement(NO_MATCHES);
-            } else {
-                myCampaigns.removeAllElements();
-            
-                for (Campaign campaign : campaigns) {
-                    myCampaigns.addElement(campaign);
-                }
-            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        connection.close();
+    }
+    
+    public void getMyInfo() throws IOException, ClassNotFoundException {
+        ArrayList<String> userInfo;
+        try (Socket connection = new Socket(Session.getCurrentServerIp(),
+                Session.getCurrentServerPort())) {
+            ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
+            
+            ArrayList<String> stream = new ArrayList<>();
+            stream.add(Session.getCurrentUsername());
+            stream.add(Session.getCurrentPassword());
+            stream.add("getMyInfo");
+            
+            toServer.writeObject(stream);
+            
+            ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
+            userInfo = (ArrayList) inStream.readObject();
+            Session.setCurrentUserId(Integer.parseInt(userInfo.get(1)));
+            
+            System.out.println(Session.getCurrentUserId());
+        }
+    }
+    
+    public void getMyCampaigns(String searchArg) throws IOException {
+        try (Socket connection = new Socket(Session.getCurrentServerIp(),
+                Session.getCurrentServerPort())) {
+            ArrayList<String> stream = new ArrayList<>();
+            
+            stream.add(Session.getCurrentUsername());
+            stream.add(Session.getCurrentPassword());
+            stream.add("getMyCampaigns");
+            stream.add(Session.getCurrentUserId().toString());
+            stream.add(searchArg);
+            
+            ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
+            toServer.writeObject(stream);
+            
+            try {
+                ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
+                campaigns = (ArrayList) inStream.readObject();
+                if(campaigns.isEmpty()){
+                    myCampaigns.removeAllElements();
+                    myCampaigns.addElement(NO_MATCHES);
+                } else {
+                    myCampaigns.removeAllElements();
+                    
+                    for (Campaign campaign : campaigns) {
+                        myCampaigns.addElement(campaign);
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void getCampaigns(String searchArg) throws IOException {
+        try (Socket connection = new Socket(Session.getCurrentServerIp(),
+                Session.getCurrentServerPort())) {
+            ArrayList<String> stream = new ArrayList<>();
+            
+            stream.add(Session.getCurrentUsername());
+            stream.add(Session.getCurrentPassword());
+            stream.add("getCampaigns");
+            stream.add(searchArg);
+            
+            ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
+            toServer.writeObject(stream);
+            
+            try {
+                ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
+                campaigns = (ArrayList) inStream.readObject();
+                if(campaigns.isEmpty()){
+                    myCampaigns.removeAllElements();
+                    myCampaigns.addElement(NO_MATCHES);
+                } else {
+                    myCampaigns.removeAllElements();
+                    
+                    for (Campaign campaign : campaigns) {
+                        myCampaigns.addElement(campaign);
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     public void getEpisodes() throws IOException {
@@ -216,7 +253,7 @@ public class Overview extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Adventure Planner");
         setIconImage(getToolkit().getImage(getClass().getResource("/img/account_icon.png")));
-        setMinimumSize(new java.awt.Dimension(879, 499));
+        setMinimumSize(new java.awt.Dimension(953, 499));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -319,12 +356,10 @@ public class Overview extends javax.swing.JFrame {
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setAutoscrolls(true);
         jScrollPane1.setFocusable(false);
-        jScrollPane1.setMinimumSize(null);
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 0));
 
         jPanel6.setBackground(new java.awt.Color(51, 51, 51));
         jPanel6.setMinimumSize(null);
-        jPanel6.setPreferredSize(null);
 
         jPanel7.setBackground(new java.awt.Color(40, 40, 40));
         jPanel7.setMinimumSize(new java.awt.Dimension(0, 173));
@@ -484,7 +519,6 @@ public class Overview extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(40, 40, 40));
         jPanel1.setMinimumSize(null);
-        jPanel1.setPreferredSize(null);
 
         lblCharacterName.setFont(new java.awt.Font("Dialog", 1, 21)); // NOI18N
         lblCharacterName.setForeground(new java.awt.Color(255, 255, 255));
@@ -626,15 +660,16 @@ public class Overview extends javax.swing.JFrame {
         overviewMenu.setMargin(new java.awt.Insets(40, 40, 40, 40));
         overviewMenu.setMinimumSize(new java.awt.Dimension(0, 50));
         overviewMenu.setName(""); // NOI18N
-        overviewMenu.setPreferredSize(new java.awt.Dimension(64, 30));
+        overviewMenu.setPreferredSize(new java.awt.Dimension(54, 30));
 
+        menuSettings.setBackground(new java.awt.Color(30, 30, 30));
         menuSettings.setBorder(null);
         menuSettings.setForeground(new java.awt.Color(255, 127, 0));
         menuSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings_icon.png"))); // NOI18N
         menuSettings.setContentAreaFilled(false);
         menuSettings.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
         menuSettings.setMinimumSize(new java.awt.Dimension(40, 40));
-        menuSettings.setPreferredSize(new java.awt.Dimension(40, 40));
+        menuSettings.setPreferredSize(new java.awt.Dimension(30, 40));
 
         miOptions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
         miOptions.setBackground(new java.awt.Color(30, 30, 30));
@@ -656,13 +691,13 @@ public class Overview extends javax.swing.JFrame {
 
         overviewMenu.add(menuSettings);
 
-        menuAccount.setBackground(new java.awt.Color(40, 40, 40));
+        menuAccount.setBackground(new java.awt.Color(30, 30, 30));
         menuAccount.setBorder(null);
         menuAccount.setForeground(new java.awt.Color(255, 127, 0));
         menuAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/account_icon.png"))); // NOI18N
         menuAccount.setBorderPainted(false);
-        menuAccount.setMinimumSize(new java.awt.Dimension(40, 40));
-        menuAccount.setPreferredSize(new java.awt.Dimension(40, 40));
+        menuAccount.setMinimumSize(new java.awt.Dimension(30, 40));
+        menuAccount.setPreferredSize(new java.awt.Dimension(30, 40));
 
         miLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
         miLogout.setBackground(new java.awt.Color(30, 30, 30));
@@ -736,9 +771,9 @@ public class Overview extends javax.swing.JFrame {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             try {
                 if(tfSearchCampaigns.getText().trim().equals("")){
-                    getCampaigns(GET_ALL);
+                    getMyCampaigns(GET_ALL);
                 } else {
-                    getCampaigns(tfSearchCampaigns.getText().trim());
+                    getMyCampaigns(tfSearchCampaigns.getText().trim());
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
@@ -749,9 +784,9 @@ public class Overview extends javax.swing.JFrame {
     private void btSearchCampaignsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchCampaignsActionPerformed
         try {
             if(tfSearchCampaigns.getText().trim().equals("")){
-                getCampaigns(GET_ALL);
+                getMyCampaigns(GET_ALL);
             } else {
-                getCampaigns(tfSearchCampaigns.getText().trim());
+                getMyCampaigns(tfSearchCampaigns.getText().trim());
             }
         } catch (IOException ex) {
             Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
