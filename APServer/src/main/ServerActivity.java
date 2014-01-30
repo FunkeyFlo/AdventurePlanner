@@ -22,6 +22,7 @@ public class ServerActivity implements Runnable {
     
     private QueryManager query = new QueryManager();
     private ServerMonitor sm;
+    private final Integer STANDARD_CAMPAIGN_CREATION_ROLE = 1;
     private String lastConnection = null;
     public static boolean running = false;
     private GlobalFunctions globFunc = new GlobalFunctions();
@@ -83,7 +84,7 @@ public class ServerActivity implements Runnable {
                     case "changePassword":
                         {
                             OutputStream toClient = connection.getOutputStream();
-                            PrintStream ps = new PrintStream(toClient, true); // Second param: auto-flush on write = true
+                            PrintStream ps = new PrintStream(toClient, true);
 
                             String oldPassword = datas.get(3);
                             String newPassword = datas.get(4);
@@ -152,8 +153,20 @@ public class ServerActivity implements Runnable {
                             toClient.writeObject(campaigns);
                             break;
                         }
-                    case "newCampaign":
+                    case "createCampaign":
                         {
+                            String campaignName = datas.get(3);
+                            Integer access = Integer.parseInt(datas.get(4));
+                            String rpgType = datas.get(5);
+                            String description = datas.get(6);
+                            Integer userId = Integer.parseInt(datas.get(7));
+                            
+                            Integer campaignId = query.createCampaign(campaignName,
+                                    access, rpgType, description);
+//                            System.out.println(campaignId);
+                            
+                            query.linkCampaignToUser(campaignId, userId,
+                                    STANDARD_CAMPAIGN_CREATION_ROLE);
                             
                             break;
                         }
@@ -179,7 +192,7 @@ public class ServerActivity implements Runnable {
                 }
             } else {
                 OutputStream toClient = connection.getOutputStream();
-                PrintStream ps = new PrintStream(toClient, true); // Second param: auto-flush on write = true
+                PrintStream ps = new PrintStream(toClient, true);
                 ps.println("Authentication failed..");
                 sm.writeToOutput("[ERROR]\tAuthentication failed");
             }

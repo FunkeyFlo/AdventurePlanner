@@ -6,16 +6,12 @@
 
 package main;
 
-//import connectivity.QueryManager;
-//import java.io.*;
-//import java.net.*;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-//import models.*;
 import views.*;
 
 /**

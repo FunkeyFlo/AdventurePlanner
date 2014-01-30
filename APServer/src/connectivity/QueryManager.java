@@ -10,6 +10,7 @@ import model.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ public class QueryManager {
     
     private final DatabaseManager db = new DatabaseManager();
     public final int DEFAULT_INCORRECT_LOGIN = 0;
+    public final int NO_ID_CREATED = 0;
     public PreparedStatement preparedStatement = null;
     
 //-----USER-QUERIES-------------------------------------------------------------
@@ -29,8 +31,10 @@ public class QueryManager {
         User user = new User();
         try {
             db.openConnection();
-            preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`users` WHERE `username`= ? LIMIT 1");
+            preparedStatement = db.connection.prepareStatement("SELECT *"
+                    + "FROM `users`"
+                    + "WHERE `username`= ?"
+                    + "LIMIT 1");
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
@@ -80,7 +84,9 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("SELECT `username`"
-                    + "FROM `users` WHERE `username` = ? LIMIT 1");
+                    + "FROM `users`"
+                    + "WHERE `username` = ?"
+                    + "LIMIT 1");
             preparedStatement.setString(1, username);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
@@ -101,7 +107,9 @@ public class QueryManager {
             password = BCrypt.hashpw(password, BCrypt.gensalt());
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("UPDATE `users`"
-                    + "SET `password` = ? WHERE `username` = ? LIMIT 1");
+                    + "SET `password` = ?"
+                    + "WHERE `username` = ?"
+                    + "LIMIT 1");
             preparedStatement.setString(1, password);
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
@@ -113,16 +121,56 @@ public class QueryManager {
     }
     
 //-----CAMPAIGN-QUERIES---------------------------------------------------------
-    public void createCampaign(){
-        
+    public int createCampaign(String name, int access, String rpgType, String description){
+        int campaignId = NO_ID_CREATED;
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("INSERT INTO `campaigns`"
+                    + "(`name`, `access`, `rpg_type`, `description`)"
+                    + "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, access);
+            preparedStatement.setString(3, rpgType);
+            preparedStatement.setString(4, description);
+            preparedStatement.executeUpdate();
+            
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            campaignId = rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.closeConnection();
+        }
+        return campaignId;
+    }
+    
+    public void linkCampaignToUser(int campaignId, int userId, int role){
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("INSERT INTO `users_has_campaigns`"
+                    + "(`campaigns_id`, `users_id`, `role`)"
+                    + "VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, campaignId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, role);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.closeConnection();
+        }
     }
     
     public ArrayList<Campaign> searchCampaigns(String searchArg) {
         ArrayList<Campaign> campaigns = new ArrayList<>();
         try {
             db.openConnection();
-            preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`campaigns` WHERE `name` LIKE ? ORDER BY `name`");
+            preparedStatement = db.connection.prepareStatement("SELECT *"
+                    + "FROM `campaigns`"
+                    + "WHERE `name`"
+                    + "LIKE ?"
+                    + "ORDER BY `name`");
             preparedStatement.setString(1, '%' + searchArg + '%');
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
@@ -147,14 +195,14 @@ public class QueryManager {
         try {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement(""
-                    + "SELECT campaigns.id, campaigns.name, campaigns.access,"
-                        + "campaigns.rpg_type, campaigns.description "
-                    + "FROM campaigns "
-                    + "JOIN users_has_campaigns "
-                    + "ON campaigns.id = users_has_campaigns.campaigns_id "
-                    + "WHERE users_has_campaigns.users_id = ? "
-                    + "AND campaigns.name LIKE ? "
-                    + "ORDER BY campaigns.name");
+                    + "SELECT `campaigns`.`id`, `campaigns`.`name`, `campaigns`.`access`, "
+                        + "`campaigns`.`rpg_type`, `campaigns`.`description` "
+                    + "FROM `campaigns` "
+                    + "JOIN `users_has_campaigns` "
+                    + "ON `campaigns`.`id` = `users_has_campaigns`.`campaigns_id` "
+                    + "WHERE `users_has_campaigns`.`users_id` = ? "
+                    + "AND `campaigns`.`name` LIKE ? "
+                    + "ORDER BY `campaigns`.`name`");
             preparedStatement.setInt(1, userId);
             preparedStatement.setString(2, '%' + searchArg + '%');
             ResultSet result = preparedStatement.executeQuery();
@@ -180,8 +228,10 @@ public class QueryManager {
         ArrayList<Episode> episodes = new ArrayList<>();
         try {
             db.openConnection();
-            preparedStatement = db.connection.prepareStatement("SELECT * FROM "
-                    + "`episodes` WHERE `campaigns_id` = ? ORDER BY `order_number`");
+            preparedStatement = db.connection.prepareStatement("SELECT * "
+                    + "FROM `episodes` "
+                    + "WHERE `campaigns_id` = ? "
+                    + "ORDER BY `order_number`");
             preparedStatement.setInt(1, campaignId);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
 import main.*;
 
 /**
@@ -34,6 +35,13 @@ public class ServerMonitor extends javax.swing.JFrame {
     
     public void writeToOutput(String message){
         taMonitor.append(message + '\n');
+        try {
+            taMonitor.setCaretPosition(taMonitor.getLineStartOffset(
+                    taMonitor.getLineCount() - 1));
+        } catch (BadLocationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     public void checkForConfig() {
