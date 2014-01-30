@@ -45,6 +45,11 @@ public class Main {
         frameOverview.setVisible(true);
     }
     
+    public static void displayCreateCampaign() {
+        CreateCampaign frameCreateCampaign = new CreateCampaign();
+        frameCreateCampaign.setVisible(true);
+    }
+    
     public static void displayChangePassword() {
         ChangePassword frameChangePassword = new ChangePassword();
         frameChangePassword.setVisible(true);
@@ -70,6 +75,7 @@ public class Main {
         UIManager.put("ScrollBar.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
         UIManager.put("ScrollPane.foreground", new java.awt.Color(102, 102, 102));
+        UIManager.put("TextPane.border", BorderFactory.createEmptyBorder());
         UIManager.put("List.focusCellHighlightBorder", new java.awt.Color(255,127,0));
         UIManager.put("OptionPane.background",  new java.awt.Color(51, 51, 51));
         UIManager.put("Panel.background", new java.awt.Color(51, 51, 51));
