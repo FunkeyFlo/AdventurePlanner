@@ -43,7 +43,8 @@ public class ServerActivity implements Runnable {
     
     public void startServer() throws IOException, ClassNotFoundException {
         ServerSocket server = new ServerSocket(ServerSettings.getNetworkPort());
-        sm.writeToOutput("[NETWORK]\tServer running on port: " + ServerSettings.getNetworkPort());
+        sm.writeToOutput("[NETWORK]\tServer running on port: "
+                + ServerSettings.getNetworkPort());
         while(true){
             ArrayList<String> datas = new ArrayList<>();
             String username = null, password = null, command = null;
@@ -51,7 +52,8 @@ public class ServerActivity implements Runnable {
 
             Socket connection = server.accept();
 
-            ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
+            ObjectInputStream inStream = new ObjectInputStream(
+                    connection.getInputStream());
             datas = (ArrayList) inStream.readObject();
 
             username = datas.get(0);
@@ -69,6 +71,7 @@ public class ServerActivity implements Runnable {
 
             if(globFunc.authenticate(username, password)) {
                 switch (command) {
+//------USER-CASES--------------------------------------------------------------
                     case "login":
                         {
                             OutputStream toClient = connection.getOutputStream();
@@ -76,6 +79,25 @@ public class ServerActivity implements Runnable {
 
                             ps.println("Login succesful!");
                             break;
+                        }
+                    case "changePassword":
+                        {
+                            OutputStream toClient = connection.getOutputStream();
+                            PrintStream ps = new PrintStream(toClient, true); // Second param: auto-flush on write = true
+
+                            String oldPassword = datas.get(3);
+                            String newPassword = datas.get(4);
+
+                            // check if old password matches
+                            if(globFunc.authenticate(username, oldPassword)){
+                                query.changePassword(newPassword, username);
+                                ps.println("Password has successfully been changed");
+                                break;
+                            } else {
+                                ps.println("Old password was incorrect");
+                                break;
+                            }
+
                         }
                     case "getMyInfo":
                         {
@@ -99,20 +121,7 @@ public class ServerActivity implements Runnable {
                             toClient.writeObject(userInfo);
                             break;
                         }
-                    case "getMyCampaigns":
-                        {
-                            Integer userId = Integer.parseInt(datas.get(3));
-                            String searchArg = datas.get(4);
-
-                            if(searchArg.equals("ALL")){
-                                searchArg = "";
-                            }
-
-                            ArrayList<Campaign> campaigns = query.searchMyCampaigns(userId, searchArg);
-                            ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
-                            toClient.writeObject(campaigns);
-                            break;
-                        }
+//------CAMPAIGN-CASES----------------------------------------------------------
                     case "getCampaigns":
                         {
                             String searchArg = datas.get(3);
@@ -122,37 +131,42 @@ public class ServerActivity implements Runnable {
                             }
 
                             ArrayList<Campaign> campaigns = query.searchCampaigns(searchArg);
-                            ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
+                            ObjectOutputStream toClient = new ObjectOutputStream(
+                                    connection.getOutputStream());
                             toClient.writeObject(campaigns);
                             break;
                         }
+                    case "getMyCampaigns":
+                        {
+                            Integer userId = Integer.parseInt(datas.get(3));
+                            String searchArg = datas.get(4);
+
+                            if(searchArg.equals("ALL")){
+                                searchArg = "";
+                            }
+
+                            ArrayList<Campaign> campaigns = query.searchMyCampaigns(
+                                    userId, searchArg);
+                            ObjectOutputStream toClient = new ObjectOutputStream(
+                                    connection.getOutputStream());
+                            toClient.writeObject(campaigns);
+                            break;
+                        }
+                    case "newCampaign":
+                        {
+                            
+                            break;
+                        }
+//------EPISODE-CASES-----------------------------------------------------------
                     case "getEpisodes":
                         {
                             int param1 = Integer.parseInt(datas.get(3));
 
                             ArrayList<Episode> episodes = query.getEpisodes(param1);
-                            ObjectOutputStream toClient = new ObjectOutputStream(connection.getOutputStream());
+                            ObjectOutputStream toClient = new ObjectOutputStream(
+                                    connection.getOutputStream());
                             toClient.writeObject(episodes);
                             break;
-                        }
-                    case "changePassword":
-                        {
-                            OutputStream toClient = connection.getOutputStream();
-                            PrintStream ps = new PrintStream(toClient, true); // Second param: auto-flush on write = true
-
-                            String oldPassword = datas.get(3);
-                            String newPassword = datas.get(4);
-
-                            // check if old password matches
-                            if(globFunc.authenticate(username, oldPassword)){
-                                query.changePassword(newPassword, username);
-                                ps.println("Password has successfully been changed");
-                                break;
-                            } else {
-                                ps.println("Old password was incorrect");
-                                break;
-                            }
-
                         }
                     default:
                         {

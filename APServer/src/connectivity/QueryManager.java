@@ -113,6 +113,10 @@ public class QueryManager {
     }
     
 //-----CAMPAIGN-QUERIES---------------------------------------------------------
+    public void createCampaign(){
+        
+    }
+    
     public ArrayList<Campaign> searchCampaigns(String searchArg) {
         ArrayList<Campaign> campaigns = new ArrayList<>();
         try {
