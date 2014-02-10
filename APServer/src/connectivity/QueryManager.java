@@ -150,7 +150,7 @@ public class QueryManager {
             db.openConnection();
             preparedStatement = db.connection.prepareStatement("INSERT INTO `users_has_campaigns`"
                     + "(`campaigns_id`, `users_id`, `role`)"
-                    + "VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    + "VALUES (?,?,?)");
             preparedStatement.setInt(1, campaignId);
             preparedStatement.setInt(2, userId);
             preparedStatement.setInt(3, role);
