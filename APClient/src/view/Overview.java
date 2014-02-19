@@ -42,7 +42,7 @@ public class Overview extends javax.swing.JFrame {
             getMyCampaigns(GET_ALL);
             setSelectedCampaign(0);
         } catch(IOException e) {
-            System.out.println(e.toString());
+            System.err.println(e.toString());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,7 +50,8 @@ public class Overview extends javax.swing.JFrame {
     
     public void getMyInfo() throws IOException, ClassNotFoundException {
         ArrayList<String> userInfo;
-        try (Socket connection = new Socket(Session.getCurrentServerIp(),
+        try (Socket connection = new Socket(
+                Session.getCurrentServerIp(),
                 Session.getCurrentServerPort())) {
             ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
             

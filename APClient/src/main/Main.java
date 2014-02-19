@@ -24,13 +24,11 @@ public class Main {
         if (sepItem == null) {
             return seperatedItems;
         } else {
-
             String[] temp = sepItem.split(sepChar);
 
             for (int i = 0; i < temp.length; i++) {
                 seperatedItems.add(temp[i]);
             }
-
             return seperatedItems;
         }
     }

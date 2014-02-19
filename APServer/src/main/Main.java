@@ -6,6 +6,7 @@
 
 package main;
 
+import server.ServerActivity;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -56,6 +56,35 @@ public class QueryManager {
         return user;
     }
     
+    public User getUserData(int userId) {
+        User user = new User();
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("SELECT *"
+                    + "FROM `users`"
+                    + "WHERE `username`= ?"
+                    + "LIMIT 1");
+            preparedStatement.setInt(1, userId);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                user.setUserId(result.getInt("id"));
+                user.setUsername(result.getString("username"));
+                user.setFirstName(result.getString("first_name"));
+                user.setLastName(result.getString("last_name"));
+                user.setPassword(result.getString("password"));
+                user.setIncorrectLogin(result.getInt("incorrect_login"));
+                user.setEmail(result.getString("email"));
+            }
+        } catch (SQLException e) {
+            System.out.println(db.SQL_EXCEPTION + e.getMessage());
+        }
+        finally
+        {
+            db.closeConnection();
+        }
+        return user;
+    }
+    
     public void createUser(String username, String password, String firstName,
             String lastName, String email) {
         try {
@@ -224,6 +253,34 @@ public class QueryManager {
     }
     
 //-----EPISODE-QUERIES----------------------------------------------------------
+    public int createEpisode(String name, String description, String date,
+            int orderNumber, int campaignId, int dmId){
+        int episodeId = NO_ID_CREATED;
+        try {
+            db.openConnection();
+            preparedStatement = db.connection.prepareStatement("INSERT INTO `episodes`"
+                    + "(`name`, `description`, `date`, `order_number`,"
+                    + "`campaigns_id`, `users_id`)"
+                    + "VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, description);
+            preparedStatement.setString(3, date);
+            preparedStatement.setInt(4, orderNumber);
+            preparedStatement.setInt(5, campaignId);
+            preparedStatement.setInt(6, dmId);
+            preparedStatement.executeUpdate();
+            
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            episodeId = rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.closeConnection();
+        }
+        return episodeId;
+    }
+    
     public ArrayList<Episode> getEpisodes(int campaignId) {
         ArrayList<Episode> episodes = new ArrayList<>();
         try {
