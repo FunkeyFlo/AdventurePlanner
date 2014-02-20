@@ -38,7 +38,7 @@ public class Main {
         frameCreateUser.setVisible(true);
     }
     
-    public static void stopServer(){
+    public static void stopServer() {
         if(ServerActivity.running){
             ServerActivity.running = false;
             JOptionPane.showMessageDialog(null, "Server has succesfuly been stopped..", "Notification",
@@ -50,7 +50,7 @@ public class Main {
         }
     }
     
-    public static void startServer(){
+    public static void startServer() {
 //        if(!ServerActivity.running){
 //            ServerActivity.running = true;
 //            frameServerMonitor.writeToOutput("[Startup]\tServer succesfuly started..");
