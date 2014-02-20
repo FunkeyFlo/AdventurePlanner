@@ -23,7 +23,11 @@ public class Overview extends javax.swing.JFrame {
         initComponents();
         
         HomePanel hp = new HomePanel();
-        mainContainer.add(hp, "c4");
+        CharacterPanel cp = new CharacterPanel();
+        
+        mainContainer.add(hp, "home");
+        mainContainer.add(cp, "character");
+        
         cl = (CardLayout)mainContainer.getLayout();
         
         tempSpacerMenu.setEnabled(false);
@@ -43,7 +47,8 @@ public class Overview extends javax.swing.JFrame {
         mainContainer = new javax.swing.JPanel();
         overviewMenu = new javax.swing.JMenuBar();
         viewMenu = new javax.swing.JMenu();
-        miOptions1 = new javax.swing.JMenuItem();
+        homeMenuItem = new javax.swing.JMenuItem();
+        homeMenuItem1 = new javax.swing.JMenuItem();
         tempSpacerMenu = new javax.swing.JMenu();
         settingsMenu = new javax.swing.JMenu();
         miOptions = new javax.swing.JMenuItem();
@@ -73,23 +78,39 @@ public class Overview extends javax.swing.JFrame {
         viewMenu.setActionCommand("VIEW");
         viewMenu.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
 
-        miOptions1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_HOME, 0));
-        miOptions1.setBackground(new java.awt.Color(30, 30, 30));
-        miOptions1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        miOptions1.setForeground(new java.awt.Color(255, 127, 0));
-        miOptions1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings_icon.png"))); // NOI18N
-        miOptions1.setText("Home");
-        miOptions1.setBorder(null);
-        miOptions1.setBorderPainted(false);
-        miOptions1.setPreferredSize(new java.awt.Dimension(150, 42));
-        miOptions1.setRequestFocusEnabled(false);
-        miOptions1.setSelected(true);
-        miOptions1.addActionListener(new java.awt.event.ActionListener() {
+        homeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_HOME, 0));
+        homeMenuItem.setBackground(new java.awt.Color(30, 30, 30));
+        homeMenuItem.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        homeMenuItem.setForeground(new java.awt.Color(255, 127, 0));
+        homeMenuItem.setText("Home");
+        homeMenuItem.setBorder(null);
+        homeMenuItem.setBorderPainted(false);
+        homeMenuItem.setPreferredSize(new java.awt.Dimension(150, 26));
+        homeMenuItem.setRequestFocusEnabled(false);
+        homeMenuItem.setSelected(true);
+        homeMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miOptions1ActionPerformed(evt);
+                homeMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(miOptions1);
+        viewMenu.add(homeMenuItem);
+
+        homeMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        homeMenuItem1.setBackground(new java.awt.Color(30, 30, 30));
+        homeMenuItem1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        homeMenuItem1.setForeground(new java.awt.Color(255, 127, 0));
+        homeMenuItem1.setText("Characters");
+        homeMenuItem1.setBorder(null);
+        homeMenuItem1.setBorderPainted(false);
+        homeMenuItem1.setPreferredSize(new java.awt.Dimension(150, 26));
+        homeMenuItem1.setRequestFocusEnabled(false);
+        homeMenuItem1.setSelected(true);
+        homeMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeMenuItem1ActionPerformed(evt);
+            }
+        });
+        viewMenu.add(homeMenuItem1);
 
         overviewMenu.add(viewMenu);
 
@@ -210,17 +231,22 @@ public class Overview extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_miOptionsActionPerformed
 
-    private void miOptions1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miOptions1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_miOptions1ActionPerformed
+    private void homeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeMenuItemActionPerformed
+        cl.show(mainContainer, "home");
+    }//GEN-LAST:event_homeMenuItemActionPerformed
+
+    private void homeMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeMenuItem1ActionPerformed
+        cl.show(mainContainer, "character");
+    }//GEN-LAST:event_homeMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu accountMenu;
+    private javax.swing.JMenuItem homeMenuItem;
+    private javax.swing.JMenuItem homeMenuItem1;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JMenuItem miChangePassword;
     private javax.swing.JMenuItem miLogout;
     private javax.swing.JMenuItem miOptions;
-    private javax.swing.JMenuItem miOptions1;
     private javax.swing.JMenuBar overviewMenu;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu tempSpacerMenu;
