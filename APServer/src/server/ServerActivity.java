@@ -99,9 +99,30 @@ public class ServerActivity implements Runnable {
                             break;
                         }
                     }
-                    case "getMyInfo": {
+                    case "getUserInfo": {
                         int userId = Integer.parseInt(datas.get(3));
                         ArrayList<String> userInfo = comFunc.getUserInfo(userId);
+                        ObjectOutputStream toClient = new ObjectOutputStream(
+                                connection.getOutputStream());
+                        toClient.writeObject(userInfo);
+                        break;
+                    }
+                    case "getMyInfo": {
+                        ArrayList<String> userInfo = new ArrayList<>();
+                        User requestedUser = query.getUserData(username);
+
+                        String clientsUsername = requestedUser.getUsername();
+                        Integer clientsUserId = requestedUser.getUserId();
+                        String clientsFirstName = requestedUser.getFirstName();
+                        String clientsLastName = requestedUser.getLastName();
+                        String clientsEmail = requestedUser.getEmail();
+
+                        userInfo.add(clientsUsername);
+                        userInfo.add(clientsUserId.toString());
+                        userInfo.add(clientsFirstName);
+                        userInfo.add(clientsLastName);
+                        userInfo.add(clientsEmail);
+                        
                         ObjectOutputStream toClient = new ObjectOutputStream(
                                 connection.getOutputStream());
                         toClient.writeObject(userInfo);
