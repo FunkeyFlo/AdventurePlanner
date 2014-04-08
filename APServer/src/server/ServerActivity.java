@@ -122,7 +122,7 @@ public class ServerActivity implements Runnable {
                         userInfo.add(clientsFirstName);
                         userInfo.add(clientsLastName);
                         userInfo.add(clientsEmail);
-                        
+
                         ObjectOutputStream toClient = new ObjectOutputStream(
                                 connection.getOutputStream());
                         toClient.writeObject(userInfo);
@@ -178,7 +178,7 @@ public class ServerActivity implements Runnable {
                         Integer campaignId = Integer.parseInt(datas.get(4));
                         Integer userId = Integer.parseInt(datas.get(5));
 
-                            // TODO Check if user is admin of campaign
+                        // TODO Check if user is admin of campaign
                         // TODO Link campaign to user
                         // TODO (NTH) Adding multiple users to same campaign
                         break;
@@ -186,16 +186,56 @@ public class ServerActivity implements Runnable {
 //------EPISODE-CASES-----------------------------------------------------------
                     case "getEpisodes": {
                         ArrayList<Episode> episodes = comFunc.getEpisodes(datas);
-                        
+
                         ObjectOutputStream toClient = new ObjectOutputStream(
                                 connection.getOutputStream());
                         toClient.writeObject(episodes);
                         break;
                     }
                     case "createEpisode": {
-                        
+                        //TODO create method to create episodes
                         break;
                     }
+//------CHARACTER-CASES---------------------------------------------------------
+                    case "getMyCharacters": {
+                        ArrayList<PlayerCharacter> characters = comFunc.getMyCharacters(datas);
+
+                        ObjectOutputStream toClient = new ObjectOutputStream(
+                                connection.getOutputStream());
+
+                        toClient.writeObject(characters);
+                        break;
+                    }
+
+                    case "createCharacter": {
+                        PlayerCharacter character = (PlayerCharacter) inStream.readObject();
+                        query.createCharacter(character);
+
+                        OutputStream toClient = connection.getOutputStream();
+                        PrintStream ps = new PrintStream(toClient, true);
+                        ps.println("success");
+                        break;
+                    }
+
+                    case "deleteCharacter": {
+                        Integer userId = comFunc.checkUserId(username, password);
+                        if (query.checkCharacterOwnership(userId, Integer.parseInt(datas.get(3)))) {
+                            query.deleteCharacter(Integer.parseInt(datas.get(3)));
+                        }
+                        break;
+                    }
+
+                    case "getCharactersForEpisode": {
+                        ArrayList<PlayerCharacter> characters = query.getCharactersForEpisode(
+                                Integer.parseInt(datas.get(3)));
+                        
+                        ObjectOutputStream toClient = new ObjectOutputStream(
+                                connection.getOutputStream());
+
+                        toClient.writeObject(characters);
+                        break;
+                    }
+
                     default: {
                         OutputStream toClient = connection.getOutputStream();
                         PrintStream ps = new PrintStream(toClient, true);

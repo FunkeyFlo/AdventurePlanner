@@ -10,7 +10,7 @@ package model;
  *
  * @author Flo
  */
-public class Character implements java.io.Serializable{
+public class PlayerCharacter implements java.io.Serializable{
     
     private Integer id;
     private Integer level;
@@ -21,9 +21,21 @@ public class Character implements java.io.Serializable{
     private String race;
     private String description;
 
-    public Character(Integer id, Integer level, Integer userId, String name,
+    public PlayerCharacter(Integer id, Integer level, Integer userId, String name,
             String gender, String classType, String race, String description) {
         this.id = id;
+        this.level = level;
+        this.userId = userId;
+        this.name = name;
+        this.gender = gender;
+        this.classType = classType;
+        this.race = race;
+        this.description = description;
+    }
+    
+    public PlayerCharacter(Integer level, Integer userId, String name, String gender,
+            String classType, String race, String description) {
+        this.id = null;
         this.level = level;
         this.userId = userId;
         this.name = name;
