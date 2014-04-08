@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package view;
 
 import java.io.IOException;
@@ -15,92 +14,116 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import main.Main;
+import main.RequestManager;
 import main.Session;
 import model.Campaign;
 import model.Episode;
+import model.PlayerCharacter;
 
 /**
  *
  * @author Flo
  */
 public class HomePanel extends javax.swing.JPanel {
-    
+
     private final String FAILED_AUTHENTICATION_MESSAGE = "Authentication failed..";
     private final String NOTHING = "null";
     private ArrayList<Campaign> campaigns;
     private ArrayList<Episode> episodes;
+    private ArrayList<PlayerCharacter> characters;
     private DefaultListModel myCampaigns = new DefaultListModel();
     private DefaultListModel myEpisodes = new DefaultListModel();
+    private DefaultListModel charactersForEpisode = new DefaultListModel();
+    private RequestManager rm;
     private final String GET_ALL = "ALL";
     private final String NO_MATCHES = "no matches were found";
-    
+    private final String NO_CAMPAIGNS = "no campaigns added yet";
+
     /**
      * Creates new form HomePanel
      */
     public HomePanel() {
         initComponents();
-        
+
+        liCharactersForEpisode.setModel(charactersForEpisode);
         liMyCampaigns.setModel(myCampaigns);
         liMyEpisodes.setModel(myEpisodes);
+        getMyInfo();
+        getMyCampaigns(GET_ALL);
+        showSelectedCampaign(0);
         try {
-            getMyInfo();
-            getMyCampaigns(GET_ALL);
-            showSelectedCampaign(0);
-            
             Campaign camp = (Campaign) myCampaigns.getElementAt(0);
             getEpisodes(camp);
-        } catch(IOException e) {
-            System.err.println(e.toString());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+            showSelectedEpisode(0);
+//            populateCharacterList(episodes.get(0).getId());
+        } catch (Exception ex) {
+            System.out.println("no campaigns");
         }
     }
     
-    public void getMyInfo() throws IOException, ClassNotFoundException {
+    public void populateCharacterList(int episodeId) {
+        rm = new RequestManager();
+        characters = rm.getCharactersForEpisode(episodeId);
+        if (characters.isEmpty()) {
+            charactersForEpisode.removeAllElements();
+            charactersForEpisode.addElement(NO_MATCHES);
+        } else {
+            charactersForEpisode.removeAllElements();
+            for (PlayerCharacter character : characters) {
+                charactersForEpisode.addElement(character);
+            }
+        }
+    }
+
+    public void getMyInfo() {
         ArrayList<String> userInfo;
         try (Socket connection = new Socket(
                 Session.getCurrentServerIp(),
                 Session.getCurrentServerPort())) {
             ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
-            
+
             ArrayList<String> stream = new ArrayList<>();
             stream.add(Session.getCurrentUsername());
             stream.add(Session.getCurrentPassword());
             stream.add("getMyInfo");
-            
+
             toServer.writeObject(stream);
-            
+
             ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
             userInfo = (ArrayList) inStream.readObject();
             Session.setCurrentUserId(Integer.parseInt(userInfo.get(1)));
-            
+
             System.out.println(Session.getCurrentUserId());
+        } catch (IOException ex) {
+            Logger.getLogger(HomePanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(HomePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void getMyCampaigns(String searchArg) throws IOException {
+
+    public void getMyCampaigns(String searchArg) {
         try (Socket connection = new Socket(Session.getCurrentServerIp(),
                 Session.getCurrentServerPort())) {
             ArrayList<String> stream = new ArrayList<>();
-            
+
             stream.add(Session.getCurrentUsername());
             stream.add(Session.getCurrentPassword());
             stream.add("getMyCampaigns");
             stream.add(Session.getCurrentUserId().toString());
             stream.add(searchArg);
-            
+
             ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
             toServer.writeObject(stream);
-            
+
             try {
                 ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
                 campaigns = (ArrayList) inStream.readObject();
-                if(campaigns.isEmpty()){
+                if (campaigns.isEmpty()) {
                     myCampaigns.removeAllElements();
                     myCampaigns.addElement(NO_MATCHES);
                 } else {
                     myCampaigns.removeAllElements();
-                    
+
                     for (Campaign campaign : campaigns) {
                         myCampaigns.addElement(campaign);
                     }
@@ -108,31 +131,33 @@ public class HomePanel extends javax.swing.JPanel {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(HomePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void getCampaigns(String searchArg) throws IOException {
+
+    public void getCampaigns(String searchArg) {
         try (Socket connection = new Socket(Session.getCurrentServerIp(),
                 Session.getCurrentServerPort())) {
             ArrayList<String> stream = new ArrayList<>();
-            
+
             stream.add(Session.getCurrentUsername());
             stream.add(Session.getCurrentPassword());
             stream.add("getCampaigns");
             stream.add(searchArg);
-            
+
             ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
             toServer.writeObject(stream);
-            
+
             try {
                 ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
                 campaigns = (ArrayList) inStream.readObject();
-                if(campaigns.isEmpty()){
+                if (campaigns.isEmpty()) {
                     myCampaigns.removeAllElements();
                     myCampaigns.addElement(NO_MATCHES);
                 } else {
                     myCampaigns.removeAllElements();
-                    
+
                     for (Campaign campaign : campaigns) {
                         myCampaigns.addElement(campaign);
                     }
@@ -140,34 +165,36 @@ public class HomePanel extends javax.swing.JPanel {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(HomePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void getEpisodes(Campaign camp) throws IOException {
+
+    public void getEpisodes(Campaign camp) {
         try (Socket connection = new Socket(Session.getCurrentServerIp(),
                 Session.getCurrentServerPort())) {
             ArrayList<String> stream = new ArrayList<>();
-            
+
             System.out.println("Campaign id: " + camp.getId());
             String campId = camp.getId().toString();
-            
+
             stream.add(Session.getCurrentUsername());
             stream.add(Session.getCurrentPassword());
             stream.add("getEpisodes");
             stream.add(campId);
-            
+
             ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
             toServer.writeObject(stream);
-            
+
             try {
                 ObjectInputStream inStream = new ObjectInputStream(connection.getInputStream());
                 episodes = (ArrayList) inStream.readObject();
-                if(episodes.isEmpty()){
+                if (episodes.isEmpty()) {
                     myEpisodes.removeAllElements();
                     myEpisodes.addElement(NO_MATCHES);
                 } else {
                     myEpisodes.removeAllElements();
-                    
+
                     for (Episode episode : episodes) {
                         myEpisodes.addElement(episode);
                     }
@@ -175,15 +202,17 @@ public class HomePanel extends javax.swing.JPanel {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(HomePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void showSelectedCampaign(int index){
+
+    public void showSelectedCampaign(int index) {
         try {
             lblCampName.setText(campaigns.get(index).getName());
-            lblCampaignDescription.setText("<html>" + campaigns.get(index).getDescription()+ "</html>");
+            lblCampaignDescription.setText("<html>" + campaigns.get(index).getDescription() + "</html>");
             lblRPGType.setText(campaigns.get(index).getRpgName());
-            if(campaigns.get(index).getAccess() == 2){
+            if (campaigns.get(index).getAccess() == 2) {
                 lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Private 1.fw.png")));
             } else {
                 lblAccess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Open 1.fw.png")));
@@ -192,14 +221,15 @@ public class HomePanel extends javax.swing.JPanel {
             System.out.println(e.toString());
         }
     }
-    
-    public void showSelectedEpisode(int index){
+
+    public void showSelectedEpisode(int index) {
         try {
             lblEpisodeName.setText(episodes.get(index).getName());
-            lblEpisodeDescription.setText("<html>" + episodes.get(index).getDescription()+ "</html>");
+            lblEpisodeDescription.setText("<html>" + episodes.get(index).getDescription() + "</html>");
             lblDmName.setText(episodes.get(index).getDmId().toString());
             lblEpisodeDate.setText(episodes.get(index).getDate());
             lblEpisodeOrderNumber.setText(episodes.get(index).getOrderNumber().toString());
+            populateCharacterList(episodes.get(index).getId());
         } catch (IndexOutOfBoundsException e) {
             System.out.println(e.toString());
         }
@@ -250,7 +280,8 @@ public class HomePanel extends javax.swing.JPanel {
         lblLevel = new javax.swing.JLabel();
         imgCampaign2 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        liCharactersForEpisode = new javax.swing.JList();
+        btAddCharacterToEpisode = new javax.swing.JButton();
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -341,7 +372,7 @@ public class HomePanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -352,8 +383,6 @@ public class HomePanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel4.add(jPanel2, gridBagConstraints);
-
-        jPanel3.setMinimumSize(null);
 
         jScrollPane4.setBorder(null);
 
@@ -394,7 +423,7 @@ public class HomePanel extends javax.swing.JPanel {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblRPGType)
                             .addComponent(lblCampName))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                         .addComponent(lblAccess)))
                 .addContainerGap())
         );
@@ -405,7 +434,7 @@ public class HomePanel extends javax.swing.JPanel {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(imgCampaign, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 2, Short.MAX_VALUE))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCampName)
@@ -508,7 +537,7 @@ public class HomePanel extends javax.swing.JPanel {
                         .addComponent(lblDmName))
                     .addComponent(lblEpisodeOrderNumber))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblEpisodeDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addComponent(lblEpisodeDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblEpisodeDate)
                 .addContainerGap())
@@ -539,20 +568,28 @@ public class HomePanel extends javax.swing.JPanel {
 
         jScrollPane5.setBorder(null);
 
-        jList1.setBackground(new java.awt.Color(56, 56, 56));
-        jList1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jList1.setForeground(new java.awt.Color(204, 204, 204));
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Hordrick", "Hendrick", "Pastanza" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        liCharactersForEpisode.setBackground(new java.awt.Color(56, 56, 56));
+        liCharactersForEpisode.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        liCharactersForEpisode.setForeground(new java.awt.Color(204, 204, 204));
+        liCharactersForEpisode.setFixedCellWidth(70);
+        liCharactersForEpisode.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        liCharactersForEpisode.setSelectionBackground(new java.awt.Color(56, 56, 56));
+        liCharactersForEpisode.setSelectionForeground(new java.awt.Color(255, 127, 0));
+        liCharactersForEpisode.setVisibleRowCount(1);
+        jScrollPane5.setViewportView(liCharactersForEpisode);
+
+        btAddCharacterToEpisode.setBackground(new java.awt.Color(66, 66, 66));
+        btAddCharacterToEpisode.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btAddCharacterToEpisode.setForeground(new java.awt.Color(255, 255, 255));
+        btAddCharacterToEpisode.setText("Add your character");
+        btAddCharacterToEpisode.setBorder(null);
+        btAddCharacterToEpisode.setBorderPainted(false);
+        btAddCharacterToEpisode.setRequestFocusEnabled(false);
+        btAddCharacterToEpisode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAddCharacterToEpisodeActionPerformed(evt);
+            }
         });
-        jList1.setFixedCellWidth(70);
-        jList1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
-        jList1.setSelectionBackground(new java.awt.Color(56, 56, 56));
-        jList1.setSelectionForeground(new java.awt.Color(255, 127, 0));
-        jList1.setVisibleRowCount(1);
-        jScrollPane5.setViewportView(jList1);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -560,14 +597,16 @@ public class HomePanel extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imgCampaign2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(imgCampaign2, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                    .addComponent(btAddCharacterToEpisode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCharacterName)
                             .addComponent(lblCharacterClass))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
                         .addComponent(lblLevel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblCharacterLevel))
@@ -578,8 +617,8 @@ public class HomePanel extends javax.swing.JPanel {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -594,7 +633,8 @@ public class HomePanel extends javax.swing.JPanel {
                         .addComponent(lblEpisodeDescription1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(imgCampaign2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btAddCharacterToEpisode, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -610,7 +650,7 @@ public class HomePanel extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)))
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -624,7 +664,7 @@ public class HomePanel extends javax.swing.JPanel {
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jScrollPane4.setViewportView(jPanel1);
@@ -637,7 +677,7 @@ public class HomePanel extends javax.swing.JPanel {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+            .addComponent(jScrollPane4)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -657,47 +697,33 @@ public class HomePanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void liMyCampaignsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_liMyCampaignsMouseClicked
-        if (evt.getClickCount() == 2) {
-            showSelectedCampaign(liMyCampaigns.getSelectedIndex());
-            try {
-                Campaign camp = (Campaign) liMyCampaigns.getSelectedValue();
-                getEpisodes(camp);
-            } catch (IOException ex) {
-                Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            showSelectedEpisode(0);
-        } else if (evt.getClickCount() == 3) {   // Triple-click
-        }
+        showSelectedCampaign(liMyCampaigns.getSelectedIndex());
+        Campaign camp = (Campaign) liMyCampaigns.getSelectedValue();
+        getEpisodes(camp);
+        showSelectedEpisode(0);
+        populateCharacterList(0);
     }//GEN-LAST:event_liMyCampaignsMouseClicked
 
     private void tfSearchCampaignsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchCampaignsKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            try {
-                if(tfSearchCampaigns.getText().trim().equals("")){
-                    getMyCampaigns(GET_ALL);
-                } else {
-                    getMyCampaigns(tfSearchCampaigns.getText().trim());
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+            if (tfSearchCampaigns.getText().trim().equals("")) {
+                getMyCampaigns(GET_ALL);
+            } else {
+                getMyCampaigns(tfSearchCampaigns.getText().trim());
             }
         }
     }//GEN-LAST:event_tfSearchCampaignsKeyPressed
 
     private void btSearchCampaignsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchCampaignsActionPerformed
-        try {
-            if(tfSearchCampaigns.getText().trim().equals("")){
-                getMyCampaigns(GET_ALL);
-            } else {
-                getMyCampaigns(tfSearchCampaigns.getText().trim());
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Overview.class.getName()).log(Level.SEVERE, null, ex);
+        if (tfSearchCampaigns.getText().trim().equals("")) {
+            getMyCampaigns(GET_ALL);
+        } else {
+            getMyCampaigns(tfSearchCampaigns.getText().trim());
         }
     }//GEN-LAST:event_btSearchCampaignsActionPerformed
 
@@ -706,19 +732,19 @@ public class HomePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void liMyEpisodesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_liMyEpisodesMouseClicked
-        if (evt.getClickCount() == 2) {
-            showSelectedEpisode(liMyEpisodes.getSelectedIndex());
-        } else if (evt.getClickCount() == 3) {   // Triple-click
-            System.out.println("Jammer hoor...");
-        }
+        showSelectedEpisode(liMyEpisodes.getSelectedIndex());
     }//GEN-LAST:event_liMyEpisodesMouseClicked
 
+    private void btAddCharacterToEpisodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddCharacterToEpisodeActionPerformed
+        Main.displayAddCharacters();
+    }//GEN-LAST:event_btAddCharacterToEpisodeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAddCharacterToEpisode;
     private javax.swing.JButton btSearchCampaigns;
     private javax.swing.JLabel imgCampaign;
     private javax.swing.JLabel imgCampaign2;
     private javax.swing.JButton jButton1;
-    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -747,6 +773,7 @@ public class HomePanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblEpisodes;
     private javax.swing.JLabel lblLevel;
     private javax.swing.JLabel lblRPGType;
+    private javax.swing.JList liCharactersForEpisode;
     private javax.swing.JList liMyCampaigns;
     private javax.swing.JList liMyEpisodes;
     private javax.swing.JTextField tfSearchCampaigns;

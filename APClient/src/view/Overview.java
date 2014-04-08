@@ -42,7 +42,6 @@ public class Overview extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         mainContainer = new javax.swing.JPanel();
         overviewMenu = new javax.swing.JMenuBar();
@@ -84,7 +83,6 @@ public class Overview extends javax.swing.JFrame {
         homeMenuItem.setForeground(new java.awt.Color(255, 127, 0));
         homeMenuItem.setText("Home");
         homeMenuItem.setBorder(null);
-        homeMenuItem.setBorderPainted(false);
         homeMenuItem.setPreferredSize(new java.awt.Dimension(150, 26));
         homeMenuItem.setRequestFocusEnabled(false);
         homeMenuItem.setSelected(true);
@@ -101,7 +99,6 @@ public class Overview extends javax.swing.JFrame {
         homeMenuItem1.setForeground(new java.awt.Color(255, 127, 0));
         homeMenuItem1.setText("Characters");
         homeMenuItem1.setBorder(null);
-        homeMenuItem1.setBorderPainted(false);
         homeMenuItem1.setPreferredSize(new java.awt.Dimension(150, 26));
         homeMenuItem1.setRequestFocusEnabled(false);
         homeMenuItem1.setSelected(true);
@@ -137,7 +134,6 @@ public class Overview extends javax.swing.JFrame {
         miOptions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings_icon.png"))); // NOI18N
         miOptions.setText("Options");
         miOptions.setBorder(null);
-        miOptions.setBorderPainted(false);
         miOptions.setPreferredSize(new java.awt.Dimension(150, 42));
         miOptions.setRequestFocusEnabled(false);
         miOptions.setSelected(true);
@@ -154,7 +150,6 @@ public class Overview extends javax.swing.JFrame {
         accountMenu.setBorder(null);
         accountMenu.setForeground(new java.awt.Color(255, 127, 0));
         accountMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/account_icon.png"))); // NOI18N
-        accountMenu.setBorderPainted(false);
         accountMenu.setMinimumSize(new java.awt.Dimension(30, 40));
         accountMenu.setPreferredSize(new java.awt.Dimension(30, 40));
 
@@ -165,7 +160,6 @@ public class Overview extends javax.swing.JFrame {
         miLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logout_icon.png"))); // NOI18N
         miLogout.setText("Logout");
         miLogout.setBorder(null);
-        miLogout.setBorderPainted(false);
         miLogout.setPreferredSize(new java.awt.Dimension(150, 42));
         miLogout.setRequestFocusEnabled(false);
         miLogout.setSelected(true);
@@ -183,7 +177,6 @@ public class Overview extends javax.swing.JFrame {
         miChangePassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/password_icon.png"))); // NOI18N
         miChangePassword.setText("Change password");
         miChangePassword.setBorder(null);
-        miChangePassword.setBorderPainted(false);
         miChangePassword.setMinimumSize(new java.awt.Dimension(200, 42));
         miChangePassword.setPreferredSize(new java.awt.Dimension(200, 42));
         miChangePassword.setRequestFocusEnabled(false);
@@ -203,11 +196,11 @@ public class Overview extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
         );
 
         pack();

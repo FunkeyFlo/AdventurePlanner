@@ -13,6 +13,7 @@ import java.util.logging.*;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.border.EmptyBorder;
+import main.RequestManager;
 import main.Session;
 
 /**
@@ -21,6 +22,7 @@ import main.Session;
  */
 public class CreateCampaign extends javax.swing.JFrame {
 
+    private RequestManager rm;
     /**
      * Creates new form CreateCampaign
      */
@@ -28,32 +30,11 @@ public class CreateCampaign extends javax.swing.JFrame {
         initComponents();
         for (int i = 0; i < cbAccess.getComponentCount(); i++) {
             if (cbAccess.getComponent(i) instanceof JComponent) {
-                ((JComponent) cbAccess.getComponent(i)).setBorder(new EmptyBorder(0, 0,0,0));
+                ((JComponent) cbAccess.getComponent(i)).setBorder(new EmptyBorder(1,1,1,1));
             }
             if (cbAccess.getComponent(i) instanceof AbstractButton) {
                 ((AbstractButton) cbAccess.getComponent(i)).setBorderPainted(false);
             }
-        }
-    }
-    
-    public void doCreateCampaign() throws IOException{
-        try (Socket connection = new Socket(Session.getCurrentServerIp(),
-                Session.getCurrentServerPort())) {
-            ArrayList<String> stream = new ArrayList<>();
-            
-            Integer access = cbAccess.getSelectedIndex() + 1;
-            
-            stream.add(Session.getCurrentUsername());
-            stream.add(Session.getCurrentPassword());
-            stream.add("createCampaign");
-            stream.add(tfCampaignName.getText().trim());
-            stream.add(access.toString());
-            stream.add(tfRpgType.getText().trim());
-            stream.add(tpDescription.getText().trim());
-            stream.add(Session.getCurrentUserId().toString());
-            
-            ObjectOutputStream toServer = new ObjectOutputStream(connection.getOutputStream());
-            toServer.writeObject(stream);
         }
     }
 
@@ -227,11 +208,12 @@ public class CreateCampaign extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCreateActionPerformed
-        try {
-            doCreateCampaign();
-        } catch (IOException ex) {
-            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        rm = new RequestManager();
+        String campaignName = tfCampaignName.getText().trim();
+        Integer access = cbAccess.getSelectedIndex() + 1;
+        String rpgType = tfRpgType.getText().trim();
+        String description = tpDescription.getText().trim();
+        rm.createCampaign(campaignName, access, rpgType, description);
     }//GEN-LAST:event_btCreateActionPerformed
 
     private void cbAccessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAccessActionPerformed

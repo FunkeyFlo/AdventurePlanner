@@ -30,7 +30,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         for (int i = 0; i < cbServers.getComponentCount(); i++) {
             if (cbServers.getComponent(i) instanceof JComponent) {
-                ((JComponent) cbServers.getComponent(i)).setBorder(new EmptyBorder(0, 0,0,0));
+                ((JComponent) cbServers.getComponent(i)).setBorder(new EmptyBorder(1,1,1,1));
             }
             if (cbServers.getComponent(i) instanceof AbstractButton) {
                 ((AbstractButton) cbServers.getComponent(i)).setBorderPainted(false);

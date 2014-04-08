@@ -6,12 +6,13 @@
 
 package main;
 
-import view.*;
 import java.awt.Color;
 import java.util.*;
 import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import model.PlayerCharacter;
+import view.*;
 
 /**
  *
@@ -36,6 +37,11 @@ public class Main {
     public static void displayLogin() {
         Login frameLogin = new Login();
         frameLogin.setVisible(true);
+    }
+    
+    public static void displayAddCharacters() {
+        AddCharacters addCharacters = new AddCharacters();
+        addCharacters.setVisible(true);
     }
     
     public static void displayOverview() {
